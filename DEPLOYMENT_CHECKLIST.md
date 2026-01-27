@@ -70,7 +70,7 @@
   DB_URL = <Your Render PostgreSQL Internal Database URL from Step 2>
   DB_USER = spendwise_user
   DB_PASSWORD = <Your DB password from Step 2>
-  GEMINI_API_KEY = REMOVED_API_KEY
+  GEMINI_API_KEY = <Your Gemini API Key>
   ```
 - [ ] Click "Create Web Service"
 - [ ] Wait for deployment (5-10 minutes)
@@ -149,7 +149,7 @@ If you prefer a single platform:
 - [ ] Configure environment variables:
   ```
   DB_URL = ${{Postgres.DATABASE_URL}}
-  GEMINI_API_KEY = REMOVED_API_KEY
+  GEMINI_API_KEY = <Your Gemini API Key>
   ```
 - [ ] Generate domain for backend
 - [ ] Deploy frontend (separate service)

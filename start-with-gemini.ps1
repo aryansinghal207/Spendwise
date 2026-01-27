@@ -14,7 +14,7 @@ Write-Host "========================================`n" -ForegroundColor Cyan
 # Set environment variables
 $env:DB_URL='jdbc:postgresql://localhost:8000/spendwise_db'
 $env:DB_USER='spendwise_user'
-$env:DB_PASSWORD='REMOVED_PASSWORD'
+$env:DB_PASSWORD='your-password'
 $env:GEMINI_API_KEY=$GeminiKey
 
 Write-Host "✓ Environment variables configured" -ForegroundColor Green

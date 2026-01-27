@@ -15,7 +15,7 @@ Quick start (development)
 
 ```sql
 CREATE DATABASE spendwise_db;
-CREATE USER spendwise_user WITH ENCRYPTED PASSWORD 'REMOVED_PASSWORD';
+CREATE USER spendwise_user WITH ENCRYPTED PASSWORD 'your-password';
 GRANT ALL PRIVILEGES ON DATABASE spendwise_db TO spendwise_user;
 -- And ensure schema public allows CREATE/USAGE for the user if needed
 ```
@@ -25,7 +25,7 @@ GRANT ALL PRIVILEGES ON DATABASE spendwise_db TO spendwise_user;
 ```powershell
 $env:DB_URL='jdbc:postgresql://localhost:8000/spendwise_db'
 $env:DB_USER='spendwise_user'
-$env:DB_PASSWORD='REMOVED_PASSWORD'
+$env:DB_PASSWORD='your-password'
 ```
 
 3. Build and run

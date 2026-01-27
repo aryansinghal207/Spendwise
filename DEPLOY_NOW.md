@@ -73,7 +73,7 @@
 DB_URL=<your-postgresql-url>
 DB_USER=spendwise_user
 DB_PASSWORD=<your-db-password>
-GEMINI_API_KEY=REMOVED_API_KEY
+GEMINI_API_KEY=<your-gemini-api-key>
 ```
 
 ### Frontend (Vercel/Railway)

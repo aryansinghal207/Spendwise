@@ -119,7 +119,7 @@ This fix is **already production-ready**! When you deploy:
 - **Health Check**: `/api/chat/health` (verify Gemini API key configured)
 
 ### Environment Variables Needed
-- Backend: `GEMINI_API_KEY=REMOVED_API_KEY` ✅ Already set
+- Backend: `GEMINI_API_KEY=<your-key>` ✅ Already set
 - Frontend: No changes needed ✅
 
 ---

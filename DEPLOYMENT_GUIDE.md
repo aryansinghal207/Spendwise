@@ -53,7 +53,7 @@ This guide will help you deploy SpendWise to free hosting platforms.
    DB_URL=<Your Render PostgreSQL Internal URL>
    DB_USER=spendwise_user
    DB_PASSWORD=<Your DB Password>
-   GEMINI_API_KEY=REMOVED_API_KEY
+   GEMINI_API_KEY=<Your Gemini API Key>
    ```
 5. Click **"Create Web Service"**
 6. Wait for deployment (~5-10 minutes)
@@ -113,7 +113,7 @@ VITE_API_URL=https://spendwise-backend.onrender.com
 4. Add Environment Variables:
    ```
    DB_URL=${{Postgres.DATABASE_URL}}
-   GEMINI_API_KEY=REMOVED_API_KEY
+   GEMINI_API_KEY=<Your Gemini API Key>
    ```
 5. Generate Domain (Settings → Generate Domain)
 

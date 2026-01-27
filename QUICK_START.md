@@ -22,8 +22,8 @@ npm run dev
 ```powershell
 $env:DB_URL='jdbc:postgresql://localhost:8000/spendwise_db'
 $env:DB_USER='spendwise_user'
-$env:DB_PASSWORD='REMOVED_PASSWORD'
-$env:GEMINI_API_KEY='REMOVED_API_KEY'
+$env:DB_PASSWORD='your-password'
+$env:GEMINI_API_KEY='your-gemini-api-key'
 .\mvnw.cmd spring-boot:run
 ```
 
@@ -68,7 +68,7 @@ npm run dev
 
 **Backend won't start:**
 - Check if PostgreSQL is running on port 8000
-- Verify database credentials: spendwise_user / REMOVED_PASSWORD
+- Verify database credentials: spendwise_user / your-password
 - Check if port 8080 is already in use
 
 **Chatbot not working:**
