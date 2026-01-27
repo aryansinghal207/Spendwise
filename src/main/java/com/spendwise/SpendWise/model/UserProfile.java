@@ -16,6 +16,7 @@ public class UserProfile {
     private Long id;
 
     private String name;
+    @jakarta.persistence.Column(unique = true, nullable = false)
     private String email;
     private Double monthlyIncome;
     @JsonIgnore
