@@ -1,0 +1,12 @@
+body{font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;background:#f4f6f8;color:#111;margin:0;padding:24px}
+.container{max-width:880px;margin:0 auto}
+.panel{background:#fff;padding:16px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:16px}
+h1{margin:0 0 12px}
+label{display:block;margin:8px 0}
+input{padding:8px;margin-top:4px;width:100%;box-sizing:border-box}
+button{padding:8px 12px;margin-top:8px}
+.muted{color:#666}
+.user{padding:8px;border-bottom:1px solid #eee}
+.user .name{font-weight:600}
+.user .meta{font-size:0.9em;color:#666}
+.error{color:#c00}

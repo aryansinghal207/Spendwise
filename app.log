@@ -1,0 +1,61 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.7)
+
+2025-11-03T18:30:31.945+05:30  INFO 20976 --- [SpendWise] [           main] c.s.SpendWise.SpendWiseApplication       : Starting SpendWiseApplication v0.0.1-SNAPSHOT using Java 22.0.1 with PID 20976 (C:\Users\apurv\OneDrive\Desktop\SpendWise\target\SpendWise-0.0.1-SNAPSHOT.jar started by apurv in C:\Users\apurv\OneDrive\Desktop\SpendWise)
+2025-11-03T18:30:31.950+05:30  INFO 20976 --- [SpendWise] [           main] c.s.SpendWise.SpendWiseApplication       : No active profile set, falling back to 1 default profile: "default"
+2025-11-03T18:30:34.973+05:30  INFO 20976 --- [SpendWise] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-11-03T18:30:35.246+05:30  INFO 20976 --- [SpendWise] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 231 ms. Found 1 JPA repository interface.
+2025-11-03T18:30:37.292+05:30  INFO 20976 --- [SpendWise] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-11-03T18:30:37.353+05:30  INFO 20976 --- [SpendWise] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-11-03T18:30:37.356+05:30  INFO 20976 --- [SpendWise] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2025-11-03T18:30:37.475+05:30  INFO 20976 --- [SpendWise] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-11-03T18:30:37.479+05:30  INFO 20976 --- [SpendWise] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 5395 ms
+2025-11-03T18:30:38.406+05:30  INFO 20976 --- [SpendWise] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-11-03T18:30:38.656+05:30  INFO 20976 --- [SpendWise] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.33.Final
+2025-11-03T18:30:38.804+05:30  INFO 20976 --- [SpendWise] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-11-03T18:30:40.290+05:30  INFO 20976 --- [SpendWise] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-11-03T18:30:40.504+05:30  INFO 20976 --- [SpendWise] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-11-03T18:30:41.705+05:30  INFO 20976 --- [SpendWise] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6164e137
+2025-11-03T18:30:41.716+05:30  INFO 20976 --- [SpendWise] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-11-03T18:30:42.192+05:30  INFO 20976 --- [SpendWise] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.6
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-11-03T18:30:45.755+05:30  INFO 20976 --- [SpendWise] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-11-03T18:30:45.980+05:30  INFO 20976 --- [SpendWise] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-11-03T18:30:46.868+05:30  WARN 20976 --- [SpendWise] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-03T18:30:49.025+05:30  INFO 20976 --- [SpendWise] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-11-03T18:30:49.098+05:30  INFO 20976 --- [SpendWise] [           main] c.s.SpendWise.SpendWiseApplication       : Started SpendWiseApplication in 19.392 seconds (process running for 21.279)
+2025-11-03T18:30:49.754+05:30  INFO 20976 --- [SpendWise] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-03T18:30:49.763+05:30  INFO 20976 --- [SpendWise] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-11-03T18:30:49.773+05:30  INFO 20976 --- [SpendWise] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 9 ms
+Hibernate: 
+    select
+        up1_0.id,
+        up1_0.email,
+        up1_0.monthly_income,
+        up1_0.name 
+    from
+        user_profiles up1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        user_profiles up1_0
+Hibernate: 
+    select
+        count(*) 
+    from
+        user_profiles up1_0
+UserProfiles already present: 2
