@@ -17,12 +17,8 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (repo.count() == 0) {
-            repo.save(new UserProfile("Alice", "alice@example.com", 5000.0));
-            repo.save(new UserProfile("Bob", "bob@example.com", 3000.0));
-            System.out.println("Inserted sample UserProfiles: " + repo.count());
-        } else {
-            System.out.println("UserProfiles already present: " + repo.count());
-        }
+        // Sample data disabled for production
+        // Users will sign up through the registration page
+        System.out.println("UserProfiles in database: " + repo.count());
     }
 }
