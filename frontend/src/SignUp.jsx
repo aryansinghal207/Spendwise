@@ -1,5 +1,4 @@
-import React, {useState, useRef, useEffect, useMemo} from 'react'
-
+import React, {useState, useRef, useEffect, useMemo} from 'react'import apiUrl from './api'
 export default function SignUp({onSignedUp, onSwitchToSignIn, onSwitchBack}){
   const [status,setStatus] = useState('')
   const formRef = useRef(null)
@@ -25,7 +24,7 @@ export default function SignUp({onSignedUp, onSwitchToSignIn, onSwitchBack}){
       accountType: f.elements.accountType.value
     }
     try{
-      const res = await fetch('/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      const res = await fetch(apiUrl('/api/auth/signup'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
       if (!res.ok) throw new Error(await res.text())
       const data = await res.json()
       localStorage.setItem('token', data.token)

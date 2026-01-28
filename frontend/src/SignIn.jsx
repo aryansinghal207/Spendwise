@@ -1,4 +1,5 @@
 import React, {useState, useRef, useEffect, useMemo} from 'react'
+import apiUrl from './api'
 
 export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack}){
   const [status,setStatus] = useState('')
@@ -19,7 +20,7 @@ export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack}){
     // form inputs use dynamic names to avoid autofill; access via elements
     const payload = { email: f.elements[emailName].value, password: f.elements[passwordName].value }
     try{
-      const res = await fetch('/api/auth/signin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      const res = await fetch(apiUrl('/api/auth/signin'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
       if (!res.ok) throw new Error(await res.text())
       const data = await res.json()
       localStorage.setItem('token', data.token)
