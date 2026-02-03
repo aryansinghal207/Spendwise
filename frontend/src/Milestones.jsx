@@ -16,7 +16,7 @@ export default function Milestones({ token }) {
     if (!token) return
     Promise.all([
       fetch(apiUrl('/api/goals'), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json()),
-      fetch('/api/goals/achievements', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json())
+      fetch(apiUrl('/api/goals/achievements'), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json())
     ])
       .then(([goalsData, achievementsData]) => {
         setGoals(goalsData)
