@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import apiUrl from './api'
 
 export default function BudgetAlerts({ token }) {
   const [budgets, setBudgets] = useState([])
@@ -13,8 +14,8 @@ export default function BudgetAlerts({ token }) {
   const loadData = () => {
     if (!token) return
     Promise.all([
-      fetch('/api/budgets', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json()),
-      fetch('/api/budgets/status', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json())
+      fetch(apiUrl('/api/budgets'), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json()),
+      fetch(apiUrl('/api/budgets/status'), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json())
     ])
       .then(([budgetsData, statusData]) => {
         setBudgets(budgetsData)
@@ -38,7 +39,7 @@ export default function BudgetAlerts({ token }) {
       year: new Date().getFullYear()
     }
 
-    const resp = await fetch('/api/budgets', {
+    const resp = await fetch(apiUrl('/api/budgets'), {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -53,7 +54,7 @@ export default function BudgetAlerts({ token }) {
 
   const handleDeleteBudget = async (id) => {
     if (!confirm('Delete this budget?')) return
-    await fetch(`/api/budgets/${id}`, {
+    await fetch(apiUrl(`/api/budgets/${id}`), {
       method: 'DELETE',
       headers: { 'Authorization': 'Bearer ' + token }
     })

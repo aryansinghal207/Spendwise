@@ -1,3 +1,4 @@
+import apiUrl from './api'
 import React, {useEffect, useState} from 'react'
 const FinanceChart = React.lazy(()=>import('./FinanceChart'))
 
@@ -11,7 +12,7 @@ export default function Reports({currentUser, token}){
     setFinanceLoading(true)
     try{
       const headers = token ? { 'Authorization': 'Bearer '+token } : {}
-      const res = await fetch('/api/finance/summary', { headers })
+      const res = await fetch(apiUrl('/api/finance/summary'), { headers })
       if (!res.ok) throw new Error('Failed to load finance: '+res.status)
       const data = await res.json()
       setFinance(data)

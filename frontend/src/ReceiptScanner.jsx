@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import apiUrl from './api'
 import Tesseract from 'tesseract.js'
 
 export default function ReceiptScanner({ token, onExpenseCreated }) {
@@ -73,7 +74,7 @@ export default function ReceiptScanner({ token, onExpenseCreated }) {
   const handleSaveExpense = async () => {
     if (!extractedData) return
 
-    const resp = await fetch('/api/finance/expenses', {
+    const resp = await fetch(apiUrl('/api/finance/expenses'), {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify(extractedData)

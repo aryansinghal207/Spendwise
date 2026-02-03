@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import apiUrl from './api'
 
 export default function HealthScore({ token }) {
   const [score, setScore] = useState(null)
@@ -6,7 +7,7 @@ export default function HealthScore({ token }) {
 
   useEffect(() => {
     if (!token) return
-    fetch('/api/finance/health-score', {
+    fetch(apiUrl('/api/finance/health-score'), {
       headers: { 'Authorization': 'Bearer ' + token }
     })
       .then(r => r.ok ? r.json() : Promise.reject('Failed'))

@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import apiUrl from './api'
 import DashboardEnhanced from './DashboardEnhanced'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
@@ -11,7 +12,7 @@ export default function App(){
 
   useEffect(()=>{
     if (token) {
-      fetch('/api/auth/me',{headers:{'Authorization':'Bearer '+token}})
+      fetch(apiUrl('/api/auth/me'),{headers:{'Authorization':'Bearer '+token}})
         .then(r=> r.ok ? r.json() : Promise.reject('no'))
         .then(d=> setUser(d))
         .catch(()=> { localStorage.removeItem('token'); setToken(null); setUser(null); })

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import apiUrl from './api'
 
 export default function AstraChat({ currentUser }){
   const [open, setOpen] = useState(false)
@@ -101,7 +102,7 @@ export default function AstraChat({ currentUser }){
       const headers = { 'Content-Type': 'application/json' }
       if (token) headers['Authorization'] = `Bearer ${token}`
       
-      const res = await fetch('/api/chat/ask', {
+      const res = await fetch(apiUrl('/api/chat/ask'), {
         method: 'POST',
         headers,
         body: JSON.stringify({ question })

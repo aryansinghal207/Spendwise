@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import apiUrl from './api'
 import HealthScore from './HealthScore'
 import SpendingHeatmap from './SpendingHeatmap'
 import CategoryChart from './CategoryChart'
@@ -23,7 +24,7 @@ export default function DashboardEnhanced({ currentUser, token }) {
   async function fetchFinance() {
     try {
       const headers = token ? { 'Authorization': 'Bearer ' + token } : {}
-      const res = await fetch('/api/finance/summary', { headers })
+      const res = await fetch(apiUrl('/api/finance/summary'), { headers })
       if (res.ok) {
         const data = await res.json()
         setFinance(data)

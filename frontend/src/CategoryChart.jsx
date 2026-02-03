@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import apiUrl from './api'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
 
@@ -10,7 +11,7 @@ export default function CategoryChart({ token }) {
 
   useEffect(() => {
     if (!token) return
-    fetch('/api/finance/category-breakdown', {
+    fetch(apiUrl('/api/finance/category-breakdown'), {
       headers: { 'Authorization': 'Bearer ' + token }
     })
       .then(r => r.ok ? r.json() : Promise.reject('Failed'))

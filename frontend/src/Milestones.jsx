@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import apiUrl from './api'
 import confetti from 'canvas-confetti'
 
 export default function Milestones({ token }) {
@@ -14,7 +15,7 @@ export default function Milestones({ token }) {
   const loadData = () => {
     if (!token) return
     Promise.all([
-      fetch('/api/goals', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json()),
+      fetch(apiUrl('/api/goals'), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json()),
       fetch('/api/goals/achievements', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json())
     ])
       .then(([goalsData, achievementsData]) => {

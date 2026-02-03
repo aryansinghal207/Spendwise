@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import apiUrl from './api'
 
 export default function ExportReports({ token }) {
   const [exporting, setExporting] = useState(false)
@@ -6,7 +7,7 @@ export default function ExportReports({ token }) {
   const handleExportCSV = async () => {
     setExporting(true)
     try {
-      const resp = await fetch('/api/finance/export/csv', {
+      const resp = await fetch(apiUrl('/api/finance/export/csv'), {
         headers: { 'Authorization': 'Bearer ' + token }
       })
       
@@ -32,7 +33,7 @@ export default function ExportReports({ token }) {
   const handleGenerateReport = async () => {
     setExporting(true)
     try {
-      const resp = await fetch('/api/finance/summary', {
+      const resp = await fetch(apiUrl('/api/finance/summary'), {
         headers: { 'Authorization': 'Bearer ' + token }
       })
       

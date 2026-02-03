@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import apiUrl from './api'
 const FinanceChart = React.lazy(()=>import('./FinanceChart'))
 
 export default function Dashboard({currentUser, token}){
@@ -20,7 +21,7 @@ export default function Dashboard({currentUser, token}){
     setError('')
     try{
       const headers = token ? { 'Authorization': 'Bearer '+token } : {}
-      const res = await fetch('/api/users', { headers })
+      const res = await fetch(apiUrl('/api/users'), { headers })
       if (!res.ok) throw new Error('Failed to load users: '+res.status)
       const data = await res.json()
       setUsers(data)
@@ -40,7 +41,7 @@ export default function Dashboard({currentUser, token}){
     try{
       const headers = {'Content-Type':'application/json'}
       if (token) headers['Authorization'] = 'Bearer '+token
-      const res = await fetch('/api/users',{ method:'POST', headers, body:JSON.stringify(payload) })
+      const res = await fetch(apiUrl('/api/users'),{ method:'POST', headers, body:JSON.stringify(payload) })
       if (!res.ok) {
         const txt = await res.text().catch(()=>res.statusText)
         throw new Error('Create failed: '+txt)
@@ -59,7 +60,7 @@ export default function Dashboard({currentUser, token}){
     try{
       const headers = token ? { 'Authorization': 'Bearer '+token, 'Cache-Control': 'no-cache' } : { 'Cache-Control': 'no-cache' }
       // Add timestamp to prevent caching
-      const res = await fetch('/api/finance/summary?t=' + Date.now(), { headers, cache: 'no-store' })
+      const res = await fetch(apiUrl('/api/finance/summary?t=' + Date.now()), { headers, cache: 'no-store' })
       if (!res.ok) throw new Error('Failed to load finance: '+res.status)
       const data = await res.json()
       setFinance(data)
@@ -85,7 +86,7 @@ export default function Dashboard({currentUser, token}){
     try{
       const headers = {'Content-Type':'application/json'}
       if (token) headers['Authorization'] = 'Bearer '+token
-      const res = await fetch('/api/finance/'+type, { method:'POST', headers, body:JSON.stringify(payload) })
+      const res = await fetch(apiUrl('/api/finance/'+type), { method:'POST', headers, body:JSON.stringify(payload) })
       if (!res.ok) {
         const txt = await res.text().catch(()=>res.statusText)
         throw new Error('Create failed: '+txt)
@@ -105,7 +106,7 @@ export default function Dashboard({currentUser, token}){
     try{
       const headers = {}
       if (token) headers['Authorization'] = 'Bearer '+token
-      const res = await fetch('/api/finance/'+type+'/'+id, { method:'DELETE', headers })
+      const res = await fetch(apiUrl('/api/finance/'+type+'/'+id), { method:'DELETE', headers })
       if (!res.ok) throw new Error('Delete failed: '+(await res.text().catch(()=>res.statusText)))
       await fetchFinance() // Wait for finance data to refresh
       setStatus('Deleted successfully!')
@@ -134,7 +135,7 @@ export default function Dashboard({currentUser, token}){
         setTimeout(() => setStatus(''), 3000)
         return
       }
-      const res = await fetch('/api/finance/'+type+'/'+id, { method:'PUT', headers, body:JSON.stringify(payload) })
+      const res = await fetch(apiUrl('/api/finance/'+type+'/'+id), { method:'PUT', headers, body:JSON.stringify(payload) })
       if (!res.ok) throw new Error('Update failed: '+(await res.text().catch(()=>res.statusText)))
       setEditing(prev=>{ const copy={...prev}; delete copy[key]; return copy })
       await fetchFinance() // Wait for finance data to refresh
