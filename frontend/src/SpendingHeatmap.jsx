@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import apiUrl from './api'
 
 export default function SpendingHeatmap({ token }) {
   const [dailyData, setDailyData] = useState({})
@@ -6,7 +7,7 @@ export default function SpendingHeatmap({ token }) {
 
   useEffect(() => {
     if (!token) return
-    fetch('/api/finance/daily-spending', {
+    fetch(apiUrl('/api/finance/daily-spending'), {
       headers: { 'Authorization': 'Bearer ' + token }
     })
       .then(r => r.ok ? r.json() : Promise.reject('Failed'))
