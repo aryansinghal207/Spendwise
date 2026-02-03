@@ -1,4 +1,6 @@
-import React, {useState, useRef, useEffect, useMemo} from 'react'import apiUrl from './api'
+import React, {useState, useRef, useEffect, useMemo} from 'react'
+import apiUrl from './api'
+
 export default function SignUp({onSignedUp, onSwitchToSignIn, onSwitchBack}){
   const [status,setStatus] = useState('')
   const formRef = useRef(null)

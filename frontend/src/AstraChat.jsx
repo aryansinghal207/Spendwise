@@ -176,7 +176,7 @@ export default function AstraChat({ currentUser }){
       {!open && (
         <button className="astra-fab" onClick={()=>setOpen(true)} title="Ask Astra">
           {!imgError ? (
-            <img src="/astra-logo.png" className="astra-logo-img" alt="Astra" onError={()=>setImgError(true)} />
+            <img src="/astra-logo.svg" className="astra-logo-img" alt="Astra" onError={()=>setImgError(true)} />
           ) : (
             <svg className="astra-svg" viewBox="0 0 64 64" width="44" height="44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect x="4" y="10" width="56" height="44" rx="8" fill="#0fb1a6" />
