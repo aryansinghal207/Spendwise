@@ -48,7 +48,7 @@ export default function Milestones({ token }) {
       type: formData.get('type')
     }
 
-    const resp = await fetch('/api/goals', {
+    const resp = await fetch(apiUrl('/api/goals'), {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
@@ -65,7 +65,7 @@ export default function Milestones({ token }) {
     const goal = goals.find(g => g.id === goalId)
     if (!goal) return
 
-    await fetch(`/api/goals/${goalId}`, {
+    await fetch(apiUrl(`/api/goals/${goalId}`), {
       method: 'PUT',
       headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify({ currentAmount: newAmount })
@@ -73,7 +73,7 @@ export default function Milestones({ token }) {
 
     // Check if goal completed
     if (newAmount >= goal.targetAmount && goal.status !== 'completed') {
-      await fetch(`/api/goals/${goalId}`, {
+      await fetch(apiUrl(`/api/goals/${goalId}`), {
         method: 'PUT',
         headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'completed' })
