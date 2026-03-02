@@ -69,19 +69,19 @@ export default function ExportReports({ token }) {
             <div class="summary">
               <div class="summary-card">
                 <h3>Total Income</h3>
-                <div class="amount positive">$${data.totalIncome.toFixed(2)}</div>
+                <div class="amount positive">₹${data.totalIncome.toFixed(2)}</div>
               </div>
               <div class="summary-card">
                 <h3>Total Expenses</h3>
-                <div class="amount negative">$${data.totalExpense.toFixed(2)}</div>
+                <div class="amount negative">₹${data.totalExpense.toFixed(2)}</div>
               </div>
               <div class="summary-card">
                 <h3>Total Investments</h3>
-                <div class="amount">$${data.totalInvestment.toFixed(2)}</div>
+                <div class="amount">₹${data.totalInvestment.toFixed(2)}</div>
               </div>
               <div class="summary-card">
                 <h3>Net Balance</h3>
-                <div class="amount ${data.net >= 0 ? 'positive' : 'negative'}">$${data.net.toFixed(2)}</div>
+                <div class="amount ${data.net >= 0 ? 'positive' : 'negative'}">₹${data.net.toFixed(2)}</div>
               </div>
             </div>
 
@@ -101,7 +101,7 @@ export default function ExportReports({ token }) {
                     <td>${e.date || ''}</td>
                     <td>${e.description || ''}</td>
                     <td>${e.category || 'Other'}</td>
-                    <td>$${e.amount.toFixed(2)}</td>
+                    <td>₹${e.amount.toFixed(2)}</td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -121,7 +121,7 @@ export default function ExportReports({ token }) {
                   <tr>
                     <td>${i.date || ''}</td>
                     <td>${i.description || ''}</td>
-                    <td>$${i.amount.toFixed(2)}</td>
+                    <td>₹${i.amount.toFixed(2)}</td>
                   </tr>
                 `).join('')}
               </tbody>

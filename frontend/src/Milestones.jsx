@@ -143,7 +143,7 @@ export default function Milestones({ token }) {
                   <div className="progress-fill" style={{ width: `${Math.min(progress, 100)}%` }} />
                 </div>
                 <div className="progress-text">
-                  ${goal.currentAmount.toFixed(2)} / ${goal.targetAmount.toFixed(2)} ({progress.toFixed(0)}%)
+                  ₹{goal.currentAmount.toFixed(2)} / ₹{goal.targetAmount.toFixed(2)} ({progress.toFixed(0)}%)
                 </div>
               </div>
               <div className="goal-actions">

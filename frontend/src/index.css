@@ -198,10 +198,6 @@ body,
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
-@media (max-width: 980px){
-	.add-row{ grid-template-columns: 1fr }
-}
-
 /* Ensure add-row spans full dashboard width and cards fill space */
 .add-row{ grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0,1fr)); }
 .add-row .add-card{ width:100%; min-width:0; display:flex; flex-direction:column }

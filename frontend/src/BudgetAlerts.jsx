@@ -86,7 +86,7 @@ export default function BudgetAlerts({ token }) {
                 <strong>{alert.category}</strong>
                 <div>
                   {alert.isOverBudget 
-                    ? `Over budget by $${Math.abs(alert.remaining).toFixed(2)}!` 
+                    ? `Over budget by ₹${Math.abs(alert.remaining).toFixed(2)}!` 
                     : `${alert.percentage.toFixed(0)}% of budget used`
                   }
                 </div>
@@ -133,7 +133,7 @@ export default function BudgetAlerts({ token }) {
                 </div>
               </div>
               <div className="budget-details">
-                <span>${status.spent.toFixed(2)} / ${status.limit.toFixed(2)}</span>
+                <span>₹{status.spent.toFixed(2)} / ₹{status.limit.toFixed(2)}</span>
                 <span className={isOver ? 'text-danger' : percentage >= 80 ? 'text-warning' : ''}>
                   {percentage.toFixed(0)}%
                 </span>

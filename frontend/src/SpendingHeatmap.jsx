@@ -70,7 +70,7 @@ export default function SpendingHeatmap({ token }) {
                     key={dateKey}
                     className="heatmap-day"
                     style={{ backgroundColor: getColor(amount) }}
-                    title={`${dateKey}: $${amount.toFixed(2)}`}
+                    title={`${dateKey}: ₹${amount.toFixed(2)}`}
                   />
                 )
               })}

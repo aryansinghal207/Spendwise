@@ -70,63 +70,18 @@ const themes = {
 }
 
 export default function ThemeCustomizer() {
-  const [currentTheme, setCurrentTheme] = useState('light')
-  const [showPicker, setShowPicker] = useState(false)
-
+  // Theme system kept in codebase, but UI selector removed per request.
+  // Currently this component renders nothing.
   useEffect(() => {
     const saved = localStorage.getItem('spendwise-theme')
     if (saved && themes[saved]) {
-      applyTheme(saved)
+      const theme = themes[saved]
+      const root = document.documentElement
+      Object.entries(theme.colors).forEach(([key, value]) => {
+        root.style.setProperty(key, value)
+      })
     }
   }, [])
 
-  const applyTheme = (themeName) => {
-    const theme = themes[themeName]
-    if (!theme) return
-
-    const root = document.documentElement
-    Object.entries(theme.colors).forEach(([key, value]) => {
-      root.style.setProperty(key, value)
-    })
-
-    setCurrentTheme(themeName)
-    localStorage.setItem('spendwise-theme', themeName)
-  }
-
-  return (
-    <div className="theme-customizer">
-      <button 
-        className="theme-toggle-btn"
-        onClick={() => setShowPicker(!showPicker)}
-        title="Change Theme"
-      >
-        🎨
-      </button>
-      
-      {showPicker && (
-        <div className="theme-picker">
-          <h4>Choose Theme</h4>
-          <div className="theme-options">
-            {Object.entries(themes).map(([key, theme]) => (
-              <button
-                key={key}
-                className={`theme-option ${currentTheme === key ? 'active' : ''}`}
-                onClick={() => {
-                  applyTheme(key)
-                  setShowPicker(false)
-                }}
-              >
-                <div className="theme-preview">
-                  <div style={{ background: theme.colors['--bg'] }} />
-                  <div style={{ background: theme.colors['--primary'] }} />
-                  <div style={{ background: theme.colors['--surface'] }} />
-                </div>
-                <span>{theme.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  )
+  return null
 }
