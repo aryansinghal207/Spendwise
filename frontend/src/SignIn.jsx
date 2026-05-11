@@ -21,6 +21,33 @@ export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack}){
     return /^[^\s@]*\d[^\s@]*@gmail\.com$/i.test(email)
   }
 
+  async function submitSignIn(email, password){
+    const payload = { email, password }
+    const res = await fetch(apiUrl('/api/auth/signin'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    if (!res.ok) throw new Error(await res.text())
+    const data = await res.json()
+    localStorage.setItem('token', data.token)
+    onSignedIn(data.user, data.token)
+  }
+
+  async function handleSocialSignIn(providerLabel){
+    const email = window.prompt(`${providerLabel} sign in:\nEnter your Gmail (must include a number).\nExample: name123@gmail.com`, emailDraft || '')
+    if (!email) return
+    const password = window.prompt(`${providerLabel} sign in:\nEnter your password`)
+    if (!password) return
+
+    if (!isValidGmailWithNumber(email)) {
+      setStatus('Error: Email must be a Gmail address and contain at least one number (example: name123@gmail.com).')
+      return
+    }
+
+    try {
+      await submitSignIn(email.trim(), password)
+    } catch (err) {
+      setStatus('Error: ' + err.message)
+    }
+  }
+
   async function handle(e){
     e.preventDefault()
     const f = e.target
@@ -33,13 +60,8 @@ export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack}){
       return
     }
 
-    const payload = { email, password }
     try{
-      const res = await fetch(apiUrl('/api/auth/signin'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
-      if (!res.ok) throw new Error(await res.text())
-      const data = await res.json()
-      localStorage.setItem('token', data.token)
-      onSignedIn(data.user, data.token)
+      await submitSignIn(email, password)
     }catch(err){ setStatus('Error: '+err.message) }
   }
 
@@ -64,9 +86,9 @@ export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack}){
             </div>
           </div>
           <div className="social-row">
-            <button className="social-btn">f</button>
-            <button className="social-btn">G+</button>
-            <button className="social-btn">in</button>
+            <button className="social-btn" type="button" onClick={() => handleSocialSignIn('Facebook')}>f</button>
+            <button className="social-btn" type="button" onClick={() => handleSocialSignIn('Google')}>G+</button>
+            <button className="social-btn" type="button" onClick={() => handleSocialSignIn('LinkedIn')}>in</button>
           </div>
           <div className="muted" style={{marginBottom:12}}>or use your email</div>
           {status && <div style={{color:'#c00',marginBottom:10}}>{status}</div>}

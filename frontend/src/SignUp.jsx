@@ -48,6 +48,46 @@ export default function SignUp({onSignedUp, onSwitchToSignIn, onSwitchBack}){
 
   const strength = passwordStrength(passwordDraft)
 
+  async function submitSignUp(payload){
+    const res = await fetch(apiUrl('/api/auth/signup'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+    if (!res.ok) throw new Error(await res.text())
+    const data = await res.json()
+    localStorage.setItem('token', data.token)
+    onSignedUp(data.user, data.token)
+  }
+
+  async function handleSocialSignUp(providerLabel){
+    const name = window.prompt(`${providerLabel} sign up:\nEnter your name`) || ''
+    if (!name.trim()) return
+    const email = window.prompt(`${providerLabel} sign up:\nEnter your Gmail (must include a number).\nExample: name123@gmail.com`, emailDraft || '') || ''
+    if (!email.trim()) return
+    const password = window.prompt(`${providerLabel} sign up:\nCreate a password (minimum 8 characters)`) || ''
+    if (!password) return
+
+    if (!isValidGmailWithNumber(email)) {
+      setStatus('Error: Email must be a Gmail address and contain at least one number (example: name123@gmail.com).')
+      return
+    }
+    if (password.length < 8) {
+      setStatus('Error: Password must be at least 8 characters.')
+      return
+    }
+
+    const payload = {
+      name: name.trim(),
+      email: email.trim(),
+      password,
+      monthlyIncome: 0,
+      accountType: 'individual'
+    }
+
+    try {
+      await submitSignUp(payload)
+    } catch (err) {
+      setStatus('Error: ' + err.message)
+    }
+  }
+
   async function handle(e){
     e.preventDefault()
     const f = e.target
@@ -73,11 +113,7 @@ export default function SignUp({onSignedUp, onSwitchToSignIn, onSwitchBack}){
       accountType: f.elements.accountType.value
     }
     try{
-      const res = await fetch(apiUrl('/api/auth/signup'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
-      if (!res.ok) throw new Error(await res.text())
-      const data = await res.json()
-      localStorage.setItem('token', data.token)
-      onSignedUp(data.user, data.token)
+      await submitSignUp(payload)
     }catch(err){ setStatus('Error: '+err.message) }
   }
 
@@ -102,9 +138,9 @@ export default function SignUp({onSignedUp, onSwitchToSignIn, onSwitchBack}){
             </div>
           </div>
           <div className="social-row">
-            <button className="social-btn">f</button>
-            <button className="social-btn">G+</button>
-            <button className="social-btn">in</button>
+            <button className="social-btn" type="button" onClick={() => handleSocialSignUp('Facebook')}>f</button>
+            <button className="social-btn" type="button" onClick={() => handleSocialSignUp('Google')}>G+</button>
+            <button className="social-btn" type="button" onClick={() => handleSocialSignUp('LinkedIn')}>in</button>
           </div>
           <div className="muted" style={{marginBottom:12}}>or use your email for registration</div>
           {status && <div style={{color:'#c00',marginBottom:10}}>{status}</div>}

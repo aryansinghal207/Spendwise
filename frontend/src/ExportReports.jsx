@@ -7,25 +7,26 @@ export default function ExportReports({ token }) {
   const handleExportCSV = async () => {
     setExporting(true)
     try {
+      if (!token) throw new Error('You must be signed in to export data.')
       const resp = await fetch(apiUrl('/api/finance/export/csv'), {
         headers: { 'Authorization': 'Bearer ' + token }
       })
       
-      if (resp.ok) {
-        const csv = await resp.text()
-        const blob = new Blob([csv], { type: 'text/csv' })
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `spendwise_export_${new Date().toISOString().split('T')[0]}.csv`
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        window.URL.revokeObjectURL(url)
-      }
+      if (!resp.ok) throw new Error(await resp.text())
+
+      const csv = await resp.text()
+      const blob = new Blob([csv], { type: 'text/csv' })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `spendwise_export_${new Date().toISOString().split('T')[0]}.csv`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Export failed:', error)
-      alert('Export failed. Please try again.')
+      alert('Export failed: ' + error.message)
     }
     setExporting(false)
   }
@@ -33,12 +34,14 @@ export default function ExportReports({ token }) {
   const handleGenerateReport = async () => {
     setExporting(true)
     try {
+      if (!token) throw new Error('You must be signed in to generate report.')
       const resp = await fetch(apiUrl('/api/finance/summary'), {
         headers: { 'Authorization': 'Bearer ' + token }
       })
       
-      if (resp.ok) {
-        const data = await resp.json()
+      if (!resp.ok) throw new Error(await resp.text())
+      const data = await resp.json()
+      const safe = (n) => Number(n || 0)
         
         // Generate HTML report
         const reportHTML = `
@@ -69,19 +72,19 @@ export default function ExportReports({ token }) {
             <div class="summary">
               <div class="summary-card">
                 <h3>Total Income</h3>
-                <div class="amount positive">₹${data.totalIncome.toFixed(2)}</div>
+                <div class="amount positive">₹${safe(data.totalIncome).toFixed(2)}</div>
               </div>
               <div class="summary-card">
                 <h3>Total Expenses</h3>
-                <div class="amount negative">₹${data.totalExpense.toFixed(2)}</div>
+                <div class="amount negative">₹${safe(data.totalExpense).toFixed(2)}</div>
               </div>
               <div class="summary-card">
                 <h3>Total Investments</h3>
-                <div class="amount">₹${data.totalInvestment.toFixed(2)}</div>
+                <div class="amount">₹${safe(data.totalInvestment).toFixed(2)}</div>
               </div>
               <div class="summary-card">
                 <h3>Net Balance</h3>
-                <div class="amount ${data.net >= 0 ? 'positive' : 'negative'}">₹${data.net.toFixed(2)}</div>
+                <div class="amount ${safe(data.net) >= 0 ? 'positive' : 'negative'}">₹${safe(data.net).toFixed(2)}</div>
               </div>
             </div>
 
@@ -101,7 +104,7 @@ export default function ExportReports({ token }) {
                     <td>${e.date || ''}</td>
                     <td>${e.description || ''}</td>
                     <td>${e.category || 'Other'}</td>
-                    <td>₹${e.amount.toFixed(2)}</td>
+                    <td>₹${safe(e.amount).toFixed(2)}</td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -121,7 +124,7 @@ export default function ExportReports({ token }) {
                   <tr>
                     <td>${i.date || ''}</td>
                     <td>${i.description || ''}</td>
-                    <td>₹${i.amount.toFixed(2)}</td>
+                    <td>₹${safe(i.amount).toFixed(2)}</td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -136,13 +139,13 @@ export default function ExportReports({ token }) {
         
         // Open in new window for printing
         const printWindow = window.open('', '_blank')
+        if (!printWindow) throw new Error('Popup blocked. Please allow popups and try again.')
         printWindow.document.write(reportHTML)
         printWindow.document.close()
         printWindow.print()
-      }
     } catch (error) {
       console.error('Report generation failed:', error)
-      alert('Report generation failed. Please try again.')
+      alert('Report generation failed: ' + error.message)
     }
     setExporting(false)
   }
