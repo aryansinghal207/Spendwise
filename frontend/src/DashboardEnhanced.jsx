@@ -4,8 +4,8 @@ import CategoryChart from './CategoryChart'
 import Milestones from './Milestones'
 import ReceiptScanner from './ReceiptScanner'
 import BudgetAlerts from './BudgetAlerts'
-import ExportReports from './ExportReports'
 import ThemeCustomizer from './ThemeCustomizer'
+import TrendingStocks from './TrendingStocks'
 
 const OriginalDashboard = React.lazy(() => import('./Dashboard'))
 
@@ -88,7 +88,7 @@ export default function DashboardEnhanced({ currentUser, token }) {
         {/* Top Row - Health Score and Quick Actions */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '20px' }}>
           <HealthScore key={`health_${refreshKey}`} token={token} />
-          <ExportReports key={`export_${refreshKey}`} token={token} />
+          <TrendingStocks />
         </div>
 
         {/* Main Content - two equal columns */}

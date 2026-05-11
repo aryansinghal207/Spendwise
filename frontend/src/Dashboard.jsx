@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import apiUrl from './api'
+import TrendingStocks from './TrendingStocks'
 
 export default function Dashboard({currentUser, token}){
   const [users,setUsers] = useState([])
@@ -486,40 +487,7 @@ export default function Dashboard({currentUser, token}){
           )}
         </section>
 
-        <section className="card activity-card">
-          <h3>📈 Trending Stocks</h3>
-          <div style={{padding: '16px 0'}}>
-            <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
-              {[
-                {symbol: 'RELIANCE', name: 'Reliance Industries', price: '₹2,847.50', change: '+2.3%', changeColor: '#10b981'},
-                {symbol: 'TCS', name: 'Tata Consultancy', price: '₹3,654.20', change: '+1.8%', changeColor: '#10b981'},
-                {symbol: 'INFY', name: 'Infosys', price: '₹1,523.40', change: '-0.5%', changeColor: '#ef4444'},
-                {symbol: 'HDFCBANK', name: 'HDFC Bank', price: '₹1,687.90', change: '+0.9%', changeColor: '#10b981'},
-                {symbol: 'ICICIBANK', name: 'ICICI Bank', price: '₹1,134.75', change: '+1.2%', changeColor: '#10b981'}
-              ].map((stock, i) => (
-                <div 
-                  key={i}
-                  className="stock-item"
-                >
-                  <div>
-                    <div className="stock-symbol">{stock.symbol}</div>
-                    <div className="stock-name">{stock.name}</div>
-                  </div>
-                  <div style={{textAlign: 'right'}}>
-                    <div className="stock-price">{stock.price}</div>
-                    <div style={{fontSize: '12px', fontWeight: '600', color: stock.changeColor}}>{stock.change}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="stock-disclaimer">
-              <div style={{fontSize: '12px', display: 'flex', alignItems: 'center', gap: '8px'}}>
-                <span style={{fontSize: '16px'}}>⚠️</span>
-                <span>Stock prices are indicative. Consult a financial advisor before investing.</span>
-              </div>
-            </div>
-          </div>
-        </section>
+        <TrendingStocks />
 
         <div className="add-row">
           <section className="card add-card">
