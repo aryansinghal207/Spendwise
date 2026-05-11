@@ -256,7 +256,13 @@ public class FinanceController {
 
         // Score calculation: 40% savings rate + 30% investment rate + 30% expense control
         double expenseControl = Math.min(100, Math.max(0, 100 - expenseRatio));
-        double score = (savingsRate * 0.4) + (investmentRate * 0.3) + (expenseControl * 0.3);
+        double score;
+        // Brand-new account behavior: if there are no expenses/investments yet, start at 100.
+        if (totalIncome > 0 && totalExpense == 0 && totalInvest == 0) {
+            score = 100;
+        } else {
+            score = (savingsRate * 0.4) + (investmentRate * 0.3) + (expenseControl * 0.3);
+        }
         score = Math.min(100, Math.max(0, score));
 
         String rating;

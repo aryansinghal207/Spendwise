@@ -421,6 +421,26 @@ body,
   font-size: 13px;
 }
 
+/* Classic dashboard: prevent horizontal overflow on small screens */
+.finance-row-meta input,
+.finance-row-meta select{
+  max-width: 100%;
+}
+
+@media (max-width: 768px){
+  .finance-card .finance-grid{ grid-template-columns: 1fr; }
+  .finance-card .recent-lists{ max-height: unset; }
+  .finance-row{ flex-wrap: wrap; }
+  .finance-row-meta{ width: 100%; }
+  .finance-row-meta input{ width: 100%; }
+  .btn-ghost{ padding: 10px 14px; }
+}
+
+@media (max-width: 480px){
+  .dashboard-header{ flex-direction: column; align-items: flex-start; gap: 12px; }
+  .card{ padding: 16px; }
+}
+
 .form-field{ display:block; margin-bottom:12px }
 .form-field input{ width:100%; padding:10px; border-radius:8px; border:1px solid var(--input-border); background:var(--input-bg) }
 .placeholder{ min-height:140px; display:flex; align-items:center; justify-content:center; color:#667 }
@@ -428,6 +448,27 @@ body,
 @media (max-width: 980px){
 	.dashboard-grid{ grid-template-columns: 1fr; }
 	.header-meta{ display:none }
+}
+
+/* Global responsive tweaks */
+@media (max-width: 768px){
+  .app-main{ padding:18px 12px }
+
+  /* Nav: wrap cleanly on mobile */
+  .nav-bar{ padding:10px 14px }
+  .nav-inner{ flex-wrap: wrap; gap: 10px; justify-content: space-between }
+  .nav-links{ display:flex; gap:10px; flex-wrap: wrap }
+  .nav-links a{ margin:0; padding:6px 8px; border-radius:8px }
+  .nav-actions{ width:100%; justify-content: space-between }
+  .user-info{ flex-wrap: wrap; justify-content:flex-end; row-gap:8px }
+  .user-name{ max-width: 40vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+}
+
+@media (max-width: 480px){
+  .app-main{ padding:14px 10px }
+  .nav-actions{ gap:10px }
+  .user-name{ display:none } /* keep header compact on tiny screens */
+  .account-switch{ max-width: 140px }
 }
 
 .auth-panel{
@@ -699,6 +740,13 @@ body,
   display: flex;
   justify-content: center;
   margin: 24px 0;
+}
+.health-gauge svg{ max-width: 100%; height: auto }
+
+@media (max-width: 480px){
+  .health-score-card{ padding: 18px }
+  .health-gauge{ margin: 16px 0 }
+  .health-gauge svg{ width: 180px; max-width: 100% }
 }
 
 .health-details {

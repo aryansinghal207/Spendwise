@@ -92,7 +92,7 @@ export default function DashboardEnhanced({ currentUser, token }) {
         </div>
 
         {/* Main Content - two equal columns */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', marginBottom: '20px' }}>
           <div style={{ display: 'grid', gap: '20px', alignContent: 'start' }}>
             <CategoryChart key={`cat_${refreshKey}`} token={token} />
             <Milestones key={`milestones_${refreshKey}`} token={token} />

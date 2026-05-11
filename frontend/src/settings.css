@@ -62,4 +62,11 @@
 @media (max-width: 768px){
   .settings-container{ grid-template-columns: 1fr }
   .settings-sidebar{ flex-direction: row; overflow-x: auto }
+  .settings-content{ padding: 18px }
+}
+
+@media (max-width: 480px){
+  .settings-sidebar{ padding: 12px; gap: 6px }
+  .settings-tab{ padding: 10px 12px; font-size: 13px; white-space: nowrap }
+  .settings-content{ padding: 14px }
 }
