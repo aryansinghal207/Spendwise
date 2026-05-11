@@ -1,38 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import apiUrl from './api'
+import React, { useState } from 'react'
 import HealthScore from './HealthScore'
-import SpendingHeatmap from './SpendingHeatmap'
 import CategoryChart from './CategoryChart'
 import Milestones from './Milestones'
 import ReceiptScanner from './ReceiptScanner'
 import BudgetAlerts from './BudgetAlerts'
 import ExportReports from './ExportReports'
-import EnhancedFinanceChart from './EnhancedFinanceChart'
 import ThemeCustomizer from './ThemeCustomizer'
 
 const OriginalDashboard = React.lazy(() => import('./Dashboard'))
 
 export default function DashboardEnhanced({ currentUser, token }) {
   const [showEnhanced, setShowEnhanced] = useState(true)
-  const [finance, setFinance] = useState(null)
   const [refreshKey, setRefreshKey] = useState(0)
-
-  useEffect(() => {
-    fetchFinance()
-  }, [refreshKey])
-
-  async function fetchFinance() {
-    try {
-      const headers = token ? { 'Authorization': 'Bearer ' + token } : {}
-      const res = await fetch(apiUrl('/api/finance/summary'), { headers })
-      if (res.ok) {
-        const data = await res.json()
-        setFinance(data)
-      }
-    } catch (e) {
-      console.error('Failed to load finance:', e)
-    }
-  }
 
   const handleRefresh = () => {
     setRefreshKey(prev => prev + 1)
@@ -108,23 +87,19 @@ export default function DashboardEnhanced({ currentUser, token }) {
       <div style={{ padding: '0 24px 24px 24px' }}>
         {/* Top Row - Health Score and Quick Actions */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '20px' }}>
-          <HealthScore token={token} />
-          <ExportReports token={token} />
+          <HealthScore key={`health_${refreshKey}`} token={token} />
+          <ExportReports key={`export_${refreshKey}`} token={token} />
         </div>
 
         {/* Second Row - Charts */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px', marginBottom: '20px' }}>
-          <CategoryChart token={token} />
-          {finance && <EnhancedFinanceChart summary={finance} />}
+          <CategoryChart key={`cat_${refreshKey}`} token={token} />
+          <BudgetAlerts key={`budget_${refreshKey}`} token={token} />
         </div>
-
-        {/* Third Row - Heatmap */}
-        <SpendingHeatmap token={token} />
 
         {/* Fourth Row - Budget and Goals */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px', margin: '20px 0' }}>
-          <BudgetAlerts token={token} />
-          <Milestones token={token} />
+          <Milestones key={`milestones_${refreshKey}`} token={token} />
         </div>
 
         {/* Fifth Row - Receipt Scanner */}

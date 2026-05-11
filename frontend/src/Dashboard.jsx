@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import apiUrl from './api'
-const FinanceChart = React.lazy(()=>import('./FinanceChart'))
 
 export default function Dashboard({currentUser, token}){
   const [users,setUsers] = useState([])
