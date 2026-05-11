@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function NavBar({user, onSignOut, theme, onToggleTheme, onNavigate, currentView}){
   return (
-    <header className="nav-bar">
+    <header className={`nav-bar ${!user ? 'nav-auth' : ''}`}>
       <div className="nav-inner">
         <div className="brand">SpendWise</div>
         <nav className="nav-links">
@@ -29,7 +29,15 @@ export default function NavBar({user, onSignOut, theme, onToggleTheme, onNavigat
           </a>
         </nav>
         <div className="nav-actions">
-          <button className="theme-toggle" onClick={() => onToggleTheme && onToggleTheme()} title="Toggle theme">{theme === 'dark' ? '🌙' : '☀️'}</button>
+          <label className="theme-switch" title="Toggle theme">
+            <input
+              type="checkbox"
+              checked={theme === 'dark'}
+              onChange={() => onToggleTheme && onToggleTheme()}
+              aria-label="Toggle theme"
+            />
+            <span className="theme-slider" aria-hidden="true" />
+          </label>
           {user ? (
             <div className="user-info">
               <div className="user-name">{user.name}</div>

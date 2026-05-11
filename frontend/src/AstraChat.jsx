@@ -193,21 +193,21 @@ export default function AstraChat({ currentUser }){
       {open && (
         <div className="astra-panel" role="dialog" aria-label="Astra chat">
           <div className="astra-header">
-            <div style={{display:'flex',alignItems:'center',gap:8}}>
-              <div style={{width:36,height:36,flex:'none'}}>
+            <div className="astra-header-left">
+              <div className="astra-header-icon">
                 <svg viewBox="0 0 64 64" width="36" height="36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                   <rect x="4" y="10" width="56" height="44" rx="8" fill="#0fb1a6" />
                 </svg>
               </div>
-              <div>
+              <div className="astra-header-text">
                 <div className="astra-title">Astra <span className="beta">beta</span></div>
                 <div className="astra-sub">Your SpendWise assistant</div>
               </div>
             </div>
-            <div style={{display:'flex',alignItems:'center',gap:8}}>
+            <div className="astra-header-right">
               <input className="astra-search" placeholder="Search FAQs" value={query} onChange={e=>setQuery(e.target.value)} />
               <button className="astra-stats-btn" onClick={() => setShowStats(s => !s)} title="Show stats">📊</button>
-              <button className="astra-close" onClick={()=>setOpen(false)} aria-label="Close">×</button>
+              <button className="astra-close" onClick={()=>setOpen(false)} aria-label="Close" title="Close">❌</button>
             </div>
           </div>
 

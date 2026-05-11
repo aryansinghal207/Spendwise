@@ -102,6 +102,72 @@ body,
 .user-name{ font-weight:700; color:var(--nav-text) }
 .user-type{ font-size:12px; color:var(--muted) }
 
+/* Auth pages: make header a clear grey in light theme for contrast */
+.nav-bar.nav-auth{
+  background: #eef2f7;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+}
+[data-theme="dark"] .nav-bar.nav-auth{
+  background: linear-gradient(90deg,var(--nav-bg), color-mix(in srgb, var(--nav-bg) 90%, #000000));
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+/* Theme toggle slider (keeps icon so users recognize it) */
+.theme-switch{
+  position: relative;
+  display:inline-flex;
+  align-items:center;
+  user-select:none;
+}
+.theme-switch input{
+  position:absolute;
+  opacity:0;
+  width:1px;
+  height:1px;
+  pointer-events:none;
+}
+.theme-slider{
+  width:56px;
+  height:30px;
+  border-radius:999px;
+  background: rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  display:block;
+  position:relative;
+  cursor:pointer;
+  transition: background-color var(--transition-md), border-color var(--transition-md);
+}
+.theme-slider::before{
+  content:"☀️";
+  position:absolute;
+  top:50%;
+  left:4px;
+  transform: translateY(-50%);
+  width:24px;
+  height:24px;
+  border-radius:999px;
+  background: var(--surface);
+  border: 1px solid rgba(2,6,23,0.10);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  transition: transform var(--transition-md), background-color var(--transition-md);
+}
+.theme-switch input:focus-visible + .theme-slider{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.22);
+}
+.theme-switch input:checked + .theme-slider{
+  background: rgba(99, 102, 241, 0.22);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+.theme-switch input:checked + .theme-slider::before{
+  content:"🌙";
+  transform: translate(26px, -50%);
+  background: var(--surface);
+}
+
 .app-main{ flex:1; padding:28px 18px }
 .auth-shell{ display:flex; align-items:center; justify-content:center; min-height: calc(100vh - 140px) }
 .app-footer{ text-align:center; padding:18px 0; color:var(--muted); background:transparent }
@@ -371,6 +437,33 @@ body,
 
 .muted{ color: #98a0aa }
 
+/* Auth field hints + errors */
+.field-hint{ font-size:12px; margin-top:6px; color:var(--muted) }
+.error-text{ color:#c0262d }
+
+/* Password strength meter */
+.pw-meter{ margin-top:10px }
+.pw-meter-row{ display:flex; align-items:center; gap:10px }
+.pw-meter-bar{
+  flex:1;
+  height:10px;
+  border-radius:999px;
+  background: rgba(148, 163, 184, 0.25);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  overflow:hidden;
+}
+.pw-meter-fill{ display:block; height:100%; border-radius:999px; transition: width 180ms ease, background-color 180ms ease }
+.pw-meter-label{ min-width:78px; font-size:12px; font-weight:800; letter-spacing:0.3px }
+
+.pw-meter-bar.level-1 .pw-meter-fill{ background: linear-gradient(90deg, #ef4444, #f97316) }
+.pw-meter-label.level-1{ color:#ef4444 }
+
+.pw-meter-bar.level-2 .pw-meter-fill{ background: linear-gradient(90deg, #f59e0b, #fbbf24) }
+.pw-meter-label.level-2{ color:#f59e0b }
+
+.pw-meter-bar.level-3 .pw-meter-fill{ background: linear-gradient(90deg, #10b981, #22c55e) }
+.pw-meter-label.level-3{ color:#10b981 }
+
 
 .auth-brand{ font-weight:800; font-size:20px; color:white }
 
@@ -422,7 +515,38 @@ body,
 .astra-fab .astra-dot{ display:inline-block; width:100%; text-align:center }
 .astra-logo-img{ width:44px; height:44px; object-fit:cover; border-radius:10px; display:block; margin:6px }
 .astra-panel{ width:320px; max-width:92vw; height:420px; background:var(--surface); border-radius:10px; box-shadow:0 20px 60px rgba(2,6,23,0.12); display:flex; flex-direction:column; overflow:hidden }
-.astra-header{ display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid var(--card-border); background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.96)) }
+.astra-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:8px 10px;
+  border-bottom:1px solid var(--card-border);
+  background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.96));
+}
+.astra-header-left{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  flex:1 1 auto;
+}
+.astra-header-icon{
+  width:28px;
+  height:28px;
+  flex: 0 0 28px;
+}
+.astra-header-icon svg{ width:28px; height:28px; display:block }
+.astra-header-text{ min-width:0 }
+.astra-title{ font-size:14px; line-height:1.1 }
+.astra-sub{ font-size:11px; line-height:1.1; color:var(--muted) }
+
+.astra-header-right{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex: 0 0 auto;
+}
 .astra-title{ font-weight:800 }
 .astra-sub{ font-size:12px; color:var(--muted) }
 .astra-close{ background:transparent; border:none; font-size:16px; cursor:pointer }
@@ -440,7 +564,14 @@ body,
 .astra-widget.open .astra-fab{ display:none }
 
 /* richer styles */
-.astra-search{ padding:8px 10px; border-radius:8px; border:1px solid var(--input-border); background:var(--input-bg); width:180px }
+.astra-search{
+  padding:8px 10px;
+  border-radius:8px;
+  border:1px solid var(--input-border);
+  background:var(--input-bg);
+  width:120px;
+  min-width:0;
+}
 .astra-min{ background:transparent; border:0; cursor:pointer; font-size:18px }
 .astra-msg-meta{ display:flex; align-items:center; gap:8px; margin-bottom:6px }
 .astra-avatar{ width:28px; height:28px; border-radius:14px; display:inline-flex; align-items:center; justify-content:center; font-weight:700; color:#fff }
@@ -473,8 +604,30 @@ body,
 @media (max-width:420px){ .astra-panel{ width:calc(100vw - 28px); right:14px; left:14px; bottom:14px } }
 
 /* Close button styling to ensure visibility */
-.astra-close{ background:transparent; border:0; cursor:pointer; font-size:20px; padding:4px 8px; color:var(--muted); line-height:1 }
-.astra-close:hover{ background:rgba(0,0,0,0.03); color:var(--text-dark); border-radius:8px }
+.astra-close{
+  background:transparent;
+  border:0;
+  cursor:pointer;
+  width:32px;
+  height:32px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex: 0 0 32px;
+  padding:0;
+  font-size:16px;
+  color:var(--muted);
+  line-height:1;
+  border-radius:8px;
+}
+.astra-close:hover{ background:rgba(0,0,0,0.03); color:var(--text-dark) }
+
+/* On small widths, keep controls compact so ❌ stays visible */
+@media (max-width:420px){
+  .astra-sub{ display:none }
+  .astra-search{ width:88px; padding:6px 8px }
+  .astra-stats-btn{ padding:4px 6px }
+}
 
 /* AI badge for ChatGPT responses */
 .astra-ai-badge{ font-size:14px; margin-left:auto; opacity:0.7 }
