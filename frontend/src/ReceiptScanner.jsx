@@ -97,13 +97,27 @@ export default function ReceiptScanner({ token, onExpenseCreated }) {
       <h3>📷 Receipt Scanner</h3>
       
       <div className="scanner-upload">
-        <label htmlFor="receipt-upload" className="upload-label">
-          {scanning ? `Scanning... ${progress}%` : 'Upload Receipt Image'}
-        </label>
+        <div className="receipt-upload-actions">
+          <label htmlFor="receipt-upload" className="upload-label">
+            {scanning ? `Scanning... ${progress}%` : 'Upload Receipt Image'}
+          </label>
+          <label htmlFor="receipt-camera" className="upload-label secondary">
+            Open Camera
+          </label>
+        </div>
         <input 
           id="receipt-upload"
           type="file" 
           accept="image/*"
+          onChange={handleImageUpload}
+          disabled={scanning}
+          style={{ display: 'none' }}
+        />
+        <input
+          id="receipt-camera"
+          type="file"
+          accept="image/*"
+          capture="environment"
           onChange={handleImageUpload}
           disabled={scanning}
           style={{ display: 'none' }}

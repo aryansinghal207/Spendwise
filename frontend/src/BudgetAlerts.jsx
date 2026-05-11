@@ -69,7 +69,7 @@ export default function BudgetAlerts({ token }) {
     <div className="budget-alerts-card">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <h3>Budget Tracker</h3>
-        <button onClick={() => setShowAddForm(!showAddForm)} className="btn-primary">
+        <button onClick={() => setShowAddForm(!showAddForm)} className="btn-primary compact-action-btn">
           {showAddForm ? 'Cancel' : '+ Add Budget'}
         </button>
       </div>

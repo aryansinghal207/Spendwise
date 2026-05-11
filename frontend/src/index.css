@@ -265,8 +265,10 @@ body,
 }
 
 /* Ensure add-row spans full dashboard width and cards fill space */
-.add-row{ grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0,1fr)); }
-.add-row .add-card{ width:100%; min-width:0; display:flex; flex-direction:column }
+.add-row{ grid-column: 1 / -1; grid-template-columns: repeat(3, minmax(0,1fr)); gap:24px; align-items:stretch; }
+.add-row .add-card{ width:100%; min-width:0; display:flex; flex-direction:column; height:100% }
+.add-form-equal{ flex:1; display:flex; flex-direction:column; gap:8px }
+.add-card-actions{ margin-top:auto; padding-top:8px }
 .add-row .form-field{ flex:0 0 auto }
 .add-row .form-field input{ width:100% }
 .user-row{ padding:10px 0; border-bottom:1px solid #eef2f6 }
@@ -933,6 +935,23 @@ body,
   background: var(--accent-2);
 }
 
+.receipt-upload-actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.upload-label.secondary{
+  background: var(--card-border);
+  color: var(--text-dark);
+}
+
+.upload-label.secondary:hover{
+  background: var(--muted);
+  color: #fff;
+}
+
 .receipt-preview {
   text-align: center;
   margin: 20px 0;
@@ -1016,6 +1035,15 @@ body,
 .btn-secondary:hover {
   background: var(--muted);
   color: white;
+}
+
+/* Compact action buttons used in card headers (Goals, Budget) */
+.compact-action-btn{
+  padding: 7px 12px !important;
+  font-size: 12px !important;
+  line-height: 1.1;
+  border-radius: 8px !important;
+  flex: 0 0 auto;
 }
 
 /* Budget Alerts Card */

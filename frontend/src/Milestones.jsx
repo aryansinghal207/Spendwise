@@ -90,7 +90,7 @@ export default function Milestones({ token }) {
     <div className="milestones-card">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <h3>Goals & Achievements</h3>
-        <button onClick={() => setShowAddForm(!showAddForm)} className="btn-primary">
+        <button onClick={() => setShowAddForm(!showAddForm)} className="btn-primary compact-action-btn">
           {showAddForm ? 'Cancel' : '+ Add Goal'}
         </button>
       </div>

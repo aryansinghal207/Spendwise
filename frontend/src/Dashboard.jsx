@@ -524,18 +524,17 @@ export default function Dashboard({currentUser, token}){
         <div className="add-row">
           <section className="card add-card">
             <h3 style={{display:'flex',alignItems:'center',gap:'8px'}}>💵 Add Income</h3>
-            <form onSubmit={(e)=>handleAdd('incomes', e)} style={{display:'flex',flexDirection:'column',gap:8}}>
+            <form className="add-form-equal" onSubmit={(e)=>handleAdd('incomes', e)} style={{display:'flex',flexDirection:'column',gap:8}}>
               <label className="form-field">Amount <input name="amount" type="number" step="0.01" placeholder="0.00" required /></label>
               <label className="form-field">Description <input name="description" placeholder="Description" /></label>
               <label className="form-field">Date <input name="date" type="date" /></label>
-              <div style={{height:'60px'}}></div>
-              <div style={{display:'flex',justifyContent:'flex-end'}}><button className="btn-primary" type="submit">Add Income</button></div>
+              <div className="add-card-actions" style={{display:'flex',justifyContent:'flex-end'}}><button className="btn-primary" type="submit">Add Income</button></div>
             </form>
           </section>
 
           <section className="card add-card">
             <h3 style={{display:'flex',alignItems:'center',gap:'8px'}}>🛒 Add Expense</h3>
-            <form onSubmit={(e)=>handleAdd('expenses', e)} style={{display:'flex',flexDirection:'column',gap:8}}>
+            <form className="add-form-equal" onSubmit={(e)=>handleAdd('expenses', e)} style={{display:'flex',flexDirection:'column',gap:8}}>
               <label className="form-field">Amount <input name="amount" type="number" step="0.01" placeholder="0.00" required /></label>
               <label className="form-field">Description <input name="description" placeholder="Description" /></label>
               <label className="form-field">Date <input name="date" type="date" /></label>
@@ -550,18 +549,17 @@ export default function Dashboard({currentUser, token}){
                   <option value="Other">Other</option>
                 </select>
               </label>
-              <div style={{display:'flex',justifyContent:'flex-end'}}><button className="btn-primary" type="submit">Add Expense</button></div>
+              <div className="add-card-actions" style={{display:'flex',justifyContent:'flex-end'}}><button className="btn-primary" type="submit">Add Expense</button></div>
             </form>
           </section>
 
           <section className="card add-card">
             <h3 style={{display:'flex',alignItems:'center',gap:'8px'}}>🚀 Add Investment</h3>
-            <form onSubmit={(e)=>handleAdd('investments', e)} style={{display:'flex',flexDirection:'column',gap:8}}>
+            <form className="add-form-equal" onSubmit={(e)=>handleAdd('investments', e)} style={{display:'flex',flexDirection:'column',gap:8}}>
               <label className="form-field">Amount <input name="amount" type="number" step="0.01" placeholder="0.00" required /></label>
               <label className="form-field">Description <input name="description" placeholder="Description" /></label>
               <label className="form-field">Date <input name="date" type="date" /></label>
-              <div style={{height:'60px'}}></div>
-              <div style={{display:'flex',justifyContent:'flex-end'}}><button className="btn-primary" type="submit">Add Investment</button></div>
+              <div className="add-card-actions" style={{display:'flex',justifyContent:'flex-end'}}><button className="btn-primary" type="submit">Add Investment</button></div>
             </form>
           </section>
         </div>

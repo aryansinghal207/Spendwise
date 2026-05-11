@@ -91,19 +91,17 @@ export default function DashboardEnhanced({ currentUser, token }) {
           <ExportReports key={`export_${refreshKey}`} token={token} />
         </div>
 
-        {/* Second Row - Charts */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px', marginBottom: '20px' }}>
-          <CategoryChart key={`cat_${refreshKey}`} token={token} />
-          <BudgetAlerts key={`budget_${refreshKey}`} token={token} />
+        {/* Main Content - two equal columns */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+          <div style={{ display: 'grid', gap: '20px', alignContent: 'start' }}>
+            <CategoryChart key={`cat_${refreshKey}`} token={token} />
+            <Milestones key={`milestones_${refreshKey}`} token={token} />
+          </div>
+          <div style={{ display: 'grid', gap: '20px', alignContent: 'start' }}>
+            <BudgetAlerts key={`budget_${refreshKey}`} token={token} />
+            <ReceiptScanner key={`scanner_${refreshKey}`} token={token} onExpenseCreated={handleRefresh} />
+          </div>
         </div>
-
-        {/* Fourth Row - Budget and Goals */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px', margin: '20px 0' }}>
-          <Milestones key={`milestones_${refreshKey}`} token={token} />
-        </div>
-
-        {/* Fifth Row - Receipt Scanner */}
-        <ReceiptScanner token={token} onExpenseCreated={handleRefresh} />
 
         {/* Original Dashboard Content */}
         <div style={{ marginTop: '40px' }}>
