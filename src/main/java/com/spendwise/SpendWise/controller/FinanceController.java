@@ -231,24 +231,32 @@ public class FinanceController {
         UserProfile u = requireUser(authHeader);
         if (u == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid token");
 
-        List<Income> inc = incomes.findByOwnerId(u.getId());
-        List<Expense> exp = expenses.findByOwnerId(u.getId());
-        List<Investment> inv = investments.findByOwnerId(u.getId());
-
         double profileMonthly = u.getMonthlyIncome() == null ? 0 : u.getMonthlyIncome();
-        double membersMonthly = usersRepo.findByOwnerId(u.getId()).stream().mapToDouble(m -> m.getMonthlyIncome() == null ? 0 : m.getMonthlyIncome()).sum();
-        double incomesSum = inc.stream().mapToDouble(i -> i.getAmount() == null ? 0 : i.getAmount()).sum();
+        double membersMonthly = usersRepo.sumMonthlyIncomeByOwnerId(u.getId());
+        double incomesSum = incomes.sumAmountByOwnerId(u.getId());
         double totalIncome = profileMonthly + membersMonthly + incomesSum;
-        double totalExpense = exp.stream().mapToDouble(e -> e.getAmount() == null ? 0 : e.getAmount()).sum();
-        double totalInvest = inv.stream().mapToDouble(iv -> iv.getAmount() == null ? 0 : iv.getAmount()).sum();
+        double totalExpense = expenses.sumAmountByOwnerId(u.getId());
+        double totalInvest = investments.sumAmountByOwnerId(u.getId());
 
         // Calculate health score (0-100)
-        double savingsRate = totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome) * 100 : 0;
-        double investmentRate = totalIncome > 0 ? (totalInvest / totalIncome) * 100 : 0;
-        double expenseRatio = totalIncome > 0 ? (totalExpense / totalIncome) * 100 : 100;
+        double savingsRate = 0;
+        double investmentRate = 0;
+        double expenseRatio = 100;
+        if (totalIncome > 0) {
+            double remaining = totalIncome - totalExpense - totalInvest;
+            savingsRate = (remaining / totalIncome) * 100;
+            investmentRate = (totalInvest / totalIncome) * 100;
+            expenseRatio = (totalExpense / totalIncome) * 100;
+        }
+
+        // Clamp ratios for display + scoring stability
+        savingsRate = Math.min(100, Math.max(0, savingsRate));
+        investmentRate = Math.min(100, Math.max(0, investmentRate));
+        expenseRatio = Math.max(0, expenseRatio);
 
         // Score calculation: 40% savings rate + 30% investment rate + 30% expense control
-        double score = (savingsRate * 0.4) + (investmentRate * 0.3) + (Math.max(0, 100 - expenseRatio) * 0.3);
+        double expenseControl = Math.min(100, Math.max(0, 100 - expenseRatio));
+        double score = (savingsRate * 0.4) + (investmentRate * 0.3) + (expenseControl * 0.3);
         score = Math.min(100, Math.max(0, score));
 
         String rating;
