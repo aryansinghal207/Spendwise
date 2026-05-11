@@ -6,9 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "user_profiles")
+@Table(
+        name = "user_profiles",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_user_profiles_email_account_type", columnNames = {"email", "accountType"})
+        }
+)
 public class UserProfile {
 
     @Id

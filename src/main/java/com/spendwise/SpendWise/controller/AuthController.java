@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spendwise.SpendWise.model.UserProfile;
 import com.spendwise.SpendWise.repository.UserProfileRepository;
 import com.spendwise.SpendWise.services.AuthService;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,13 +54,20 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("At most 2 account types are allowed per email");
         }
 
-        UserProfile user = new UserProfile(name, email, monthlyIncome, null, accountType);
-        String token = auth.signup(user, password);
-        UserProfile saved = auth.getByToken(token);
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("token", token);
-        resp.put("user", mask(saved));
-        return ResponseEntity.ok(resp);
+        try {
+            UserProfile user = new UserProfile(name, email, monthlyIncome, null, accountType);
+            String token = auth.signup(user, password);
+            UserProfile saved = auth.getByToken(token);
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("token", token);
+            resp.put("user", mask(saved));
+            return ResponseEntity.ok(resp);
+        } catch (DataIntegrityViolationException dive) {
+            // Typically happens if DB still has a unique constraint on email, or (email, accountType)
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email/account type already exists (database constraint).");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Signup failed: " + ex.getMessage());
+        }
     }
 
     @PostMapping("/signin")
