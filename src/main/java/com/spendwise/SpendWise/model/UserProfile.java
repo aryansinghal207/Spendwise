@@ -16,13 +16,15 @@ public class UserProfile {
     private Long id;
 
     private String name;
-    @jakarta.persistence.Column(unique = true, nullable = false)
+    @jakarta.persistence.Column(nullable = false)
     private String email;
     private Double monthlyIncome;
     @JsonIgnore
     private String password;
     private String accountType; // "individual" or "group"
     private Long ownerId; // null for root owners; points to owner user id for group members
+    @jakarta.persistence.Column(length = 200000)
+    private String profileImageUrl;
 
     public UserProfile() {
     }
@@ -104,5 +106,13 @@ public class UserProfile {
 
     public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

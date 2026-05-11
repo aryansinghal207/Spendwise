@@ -34,11 +34,29 @@ public class AuthService {
     }
 
     public String signin(String email, String rawPassword) {
-        UserProfile u = repo.findByEmail(email);
+        UserProfile u = repo.findByEmailAndAccountType(email, "individual");
+        if (u == null) {
+            u = repo.findByEmail(email);
+        }
         if (u == null) return null;
         if (!encoder.matches(rawPassword, u.getPassword())) return null;
         String token = UUID.randomUUID().toString();
         tokens.put(token, u.getId());
+        return token;
+    }
+
+    public String signin(String email, String rawPassword, String accountType) {
+        UserProfile u = repo.findByEmailAndAccountType(email, accountType);
+        if (u == null) return null;
+        if (!encoder.matches(rawPassword, u.getPassword())) return null;
+        String token = UUID.randomUUID().toString();
+        tokens.put(token, u.getId());
+        return token;
+    }
+
+    public String issueTokenForUser(UserProfile user) {
+        String token = UUID.randomUUID().toString();
+        tokens.put(token, user.getId());
         return token;
     }
 

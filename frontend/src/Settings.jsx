@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import './settings.css'
+import apiUrl from './api'
 
 export default function Settings({currentUser, token, onUpdateUser}){
   const [activeTab, setActiveTab] = useState('profile')
   const [profile, setProfile] = useState({
     name: currentUser?.name || '',
     email: currentUser?.email || '',
-    monthlyIncome: currentUser?.monthlyIncome || 0
+    monthlyIncome: currentUser?.monthlyIncome || 0,
+    profileImageUrl: currentUser?.profileImageUrl || ''
   })
   const [status, setStatus] = useState('')
   const [loading, setLoading] = useState(false)
@@ -22,7 +24,8 @@ export default function Settings({currentUser, token, onUpdateUser}){
       setProfile({
         name: currentUser.name,
         email: currentUser.email,
-        monthlyIncome: currentUser.monthlyIncome || 0
+        monthlyIncome: currentUser.monthlyIncome || 0,
+        profileImageUrl: currentUser.profileImageUrl || ''
       })
     }
   }, [currentUser])
@@ -36,7 +39,7 @@ export default function Settings({currentUser, token, onUpdateUser}){
       const headers = {'Content-Type': 'application/json'}
       if (token) headers['Authorization'] = 'Bearer ' + token
       
-      const res = await fetch('/api/users/' + currentUser.id, {
+      const res = await fetch(apiUrl('/api/users/' + currentUser.id), {
         method: 'PUT',
         headers,
         body: JSON.stringify(profile)
@@ -45,7 +48,7 @@ export default function Settings({currentUser, token, onUpdateUser}){
       if (!res.ok) throw new Error('Update failed')
       
       const updated = await res.json()
-      if (onUpdateUser) onUpdateUser(updated)
+      if (onUpdateUser) onUpdateUser({...currentUser, ...updated})
       setStatus('Profile updated successfully! ✓')
       setTimeout(() => setStatus(''), 3000)
     } catch (err) {
@@ -61,7 +64,7 @@ export default function Settings({currentUser, token, onUpdateUser}){
       const headers = {}
       if (token) headers['Authorization'] = 'Bearer ' + token
       
-      const res = await fetch('/api/users/' + currentUser.id, {
+      const res = await fetch(apiUrl('/api/users/' + currentUser.id), {
         method: 'DELETE',
         headers
       })
@@ -73,6 +76,23 @@ export default function Settings({currentUser, token, onUpdateUser}){
     } catch (err) {
       setStatus('Error deleting account: ' + err.message)
     }
+  }
+
+  function handleImageSelect(e){
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (!file.type.startsWith('image/')) {
+      setStatus('Error: Please choose an image file.')
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => {
+      const base64 = reader.result?.toString() || ''
+      setProfile(prev => ({...prev, profileImageUrl: base64}))
+      setStatus('Profile photo selected. Click Save Changes to apply.')
+    }
+    reader.onerror = () => setStatus('Error: Failed to read image file.')
+    reader.readAsDataURL(file)
   }
 
   return (
@@ -122,6 +142,26 @@ export default function Settings({currentUser, token, onUpdateUser}){
               <p style={{color: '#64748b', marginBottom: '24px'}}>Update your personal information</p>
               
               <form onSubmit={handleProfileUpdate} style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+                <div className="form-group">
+                  <label>Profile Photo</label>
+                  <div style={{display:'flex', alignItems:'center', gap:'12px'}}>
+                    <div className="settings-avatar-preview">
+                      {profile.profileImageUrl ? (
+                        <img src={profile.profileImageUrl} alt="Profile preview" />
+                      ) : (
+                        <span>{(profile.name || 'U').charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageSelect}
+                      style={{width:'100%'}}
+                    />
+                  </div>
+                  <small style={{color:'#64748b', fontSize:'12px'}}>Choose a clear profile photo (recommended: square image).</small>
+                </div>
+
                 <div className="form-group">
                   <label>Full Name</label>
                   <input 

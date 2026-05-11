@@ -45,6 +45,25 @@ export default function RootApp(){
 
   function signOut(){ localStorage.removeItem('token'); setToken(null); setUser(null); setView('signin') }
 
+  async function switchAccountType(accountType){
+    if (!token || !accountType || accountType === user?.accountType) return
+    try{
+      const res = await fetch(apiUrl('/api/auth/switch-account'),{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+        body: JSON.stringify({accountType})
+      })
+      if (!res.ok) throw new Error(await res.text())
+      const data = await res.json()
+      localStorage.setItem('token', data.token)
+      setToken(data.token)
+      setUser(data.user)
+      setView('dashboard')
+    }catch(err){
+      alert('Account switch failed: '+err.message)
+    }
+  }
+
   return (
     <div className="app-root">
       <NavBar 
@@ -54,6 +73,7 @@ export default function RootApp(){
         onToggleTheme={toggleTheme}
         onNavigate={(page) => setView(page)}
         currentView={view}
+        onSwitchAccount={switchAccountType}
       />
       <main className="app-main">
         {user ? (

@@ -5,6 +5,10 @@ import com.spendwise.SpendWise.model.UserProfile;
 
 public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
 	UserProfile findByEmail(String email);
+	java.util.List<UserProfile> findAllByEmail(String email);
+	UserProfile findByEmailAndAccountType(String email, String accountType);
+	boolean existsByEmailAndAccountType(String email, String accountType);
+	long countByEmail(String email);
 
 	java.util.List<UserProfile> findByOwnerId(Long ownerId);
 

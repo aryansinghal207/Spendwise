@@ -1,6 +1,7 @@
 import React from 'react'
 
-export default function NavBar({user, onSignOut, theme, onToggleTheme, onNavigate, currentView}){
+export default function NavBar({user, onSignOut, theme, onToggleTheme, onNavigate, currentView, onSwitchAccount}){
+  const linkedTypes = Array.isArray(user?.linkedAccountTypes) ? user.linkedAccountTypes : []
   return (
     <header className={`nav-bar ${!user ? 'nav-auth' : ''}`}>
       <div className="nav-inner">
@@ -40,8 +41,26 @@ export default function NavBar({user, onSignOut, theme, onToggleTheme, onNavigat
           </label>
           {user ? (
             <div className="user-info">
+              <div className="user-avatar" aria-label="Profile photo">
+                {user.profileImageUrl ? (
+                  <img src={user.profileImageUrl} alt={user.name || 'User'} />
+                ) : (
+                  <span>{(user.name || 'U').charAt(0).toUpperCase()}</span>
+                )}
+              </div>
               <div className="user-name">{user.name}</div>
-              <div className="user-type">{user.accountType}</div>
+              {linkedTypes.length > 1 ? (
+                <select
+                  className="account-switch"
+                  value={user.accountType || 'individual'}
+                  onChange={(e)=> onSwitchAccount && onSwitchAccount(e.target.value)}
+                  title="Switch account type"
+                >
+                  {linkedTypes.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              ) : (
+                <div className="user-type">{user.accountType}</div>
+              )}
               <button className="btn-ghost small" onClick={onSignOut}>Sign out</button>
             </div>
           ) : (
