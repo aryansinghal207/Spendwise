@@ -137,12 +137,16 @@ export default function ExportReports({ token }) {
           </html>
         `
         
-        // Open in new window for printing
-        const printWindow = window.open('', '_blank')
-        if (!printWindow) throw new Error('Popup blocked. Please allow popups and try again.')
-        printWindow.document.write(reportHTML)
-        printWindow.document.close()
-        printWindow.print()
+      // Download report as HTML file (popup-safe)
+      const blob = new Blob([reportHTML], { type: 'text/html' })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `spendwise_report_${new Date().toISOString().split('T')[0]}.html`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
     } catch (error) {
       console.error('Report generation failed:', error)
       alert('Report generation failed: ' + error.message)
