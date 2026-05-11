@@ -685,6 +685,9 @@ body,
   padding: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: transform var(--transition-fast), box-shadow var(--transition-md);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .health-score-card:hover {
@@ -1439,3 +1442,38 @@ body,
   border: 1px solid var(--warning-border, rgba(251, 191, 36, 0.3));
   color: var(--text-dark);
 }
+
+/* Quick Add queue (Classic dashboard right column) */
+.quick-add-card{ height: 100% }
+.quick-add-queue{ display:flex; flex-direction:column; gap:12px }
+.quick-add-tile{
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: var(--input-bg);
+  overflow: hidden;
+}
+.quick-add-tile-head{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding: 12px 12px;
+  border:0;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-dark);
+  font-weight: 800;
+}
+.quick-add-icon{ font-size: 18px; width: 22px; text-align:center; flex:0 0 22px }
+.quick-add-title{ flex: 1 1 auto; text-align:left; font-size: 14px }
+.quick-add-chevron{ flex: 0 0 auto; color: var(--muted); font-size: 12px }
+.quick-add-form{
+  padding: 12px 12px 14px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  border-top: 1px solid var(--card-border);
+  background: var(--card-bg);
+}
+.quick-add-actions{ display:flex; justify-content:flex-end }
+.quick-add-actions .btn-primary{ width: 100%; border-radius: 10px }

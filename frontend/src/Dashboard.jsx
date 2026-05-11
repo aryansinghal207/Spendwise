@@ -12,6 +12,8 @@ export default function Dashboard({currentUser, token}){
   const [editing, setEditing] = useState({})
   const [showMembers, setShowMembers] = useState(false)
   const [showAddMember, setShowAddMember] = useState(false)
+  const [quickAddOpen, setQuickAddOpen] = useState(null) // 'incomes' | 'expenses' | 'investments' | null
+  const [quickAddOrder, setQuickAddOrder] = useState(['incomes', 'expenses', 'investments'])
 
   useEffect(()=>{ fetchUsers() },[])
   useEffect(()=>{ fetchFinance() },[])
@@ -95,10 +97,23 @@ export default function Dashboard({currentUser, token}){
       await fetchFinance() // Wait for finance data to refresh
       setStatus(type.charAt(0).toUpperCase()+type.slice(1)+' added successfully!')
       setTimeout(() => setStatus(''), 3000)
+      return true
     }catch(err){ 
       setStatus('Error: '+err.message)
       setTimeout(() => setStatus(''), 3000)
+      return false
     }
+  }
+
+  async function handleQuickAdd(type, e){
+    const ok = await handleAdd(type, e)
+    if (!ok) return
+    setQuickAddOpen(null)
+    setQuickAddOrder(prev => {
+      const next = prev.filter(t => t !== type)
+      next.push(type) // move used tile to end (queue)
+      return next
+    })
   }
 
   async function handleDelete(type, id){
@@ -487,50 +502,70 @@ export default function Dashboard({currentUser, token}){
           )}
         </section>
 
-        <TrendingStocks />
+        <section className="card activity-card quick-add-card">
+          <div className="card-header" style={{marginBottom: 12}}>
+            <h3 style={{margin:0}}>⚡ Quick Add</h3>
+          </div>
 
-        <div className="add-row">
-          <section className="card add-card">
-            <h3 style={{display:'flex',alignItems:'center',gap:'8px'}}>💵 Add Income</h3>
-            <form className="add-form-equal" onSubmit={(e)=>handleAdd('incomes', e)} style={{display:'flex',flexDirection:'column',gap:8}}>
-              <label className="form-field">Amount <input name="amount" type="number" step="0.01" placeholder="0.00" required /></label>
-              <label className="form-field">Description <input name="description" placeholder="Description" /></label>
-              <label className="form-field">Date <input name="date" type="date" /></label>
-              <div className="add-card-actions" style={{display:'flex',justifyContent:'flex-end'}}><button className="btn-primary" type="submit">Add Income</button></div>
-            </form>
-          </section>
+          <div className="quick-add-queue">
+            {quickAddOrder.map((type) => {
+              const isOpen = quickAddOpen === type
+              const meta = type === 'incomes'
+                ? { title: 'Add Income', icon: '💵', button: 'Add Income' }
+                : type === 'expenses'
+                  ? { title: 'Add Expense', icon: '🛒', button: 'Add Expense' }
+                  : { title: 'Add Investment', icon: '🚀', button: 'Add Investment' }
 
-          <section className="card add-card">
-            <h3 style={{display:'flex',alignItems:'center',gap:'8px'}}>🛒 Add Expense</h3>
-            <form className="add-form-equal" onSubmit={(e)=>handleAdd('expenses', e)} style={{display:'flex',flexDirection:'column',gap:8}}>
-              <label className="form-field">Amount <input name="amount" type="number" step="0.01" placeholder="0.00" required /></label>
-              <label className="form-field">Description <input name="description" placeholder="Description" /></label>
-              <label className="form-field">Date <input name="date" type="date" /></label>
-              <label className="form-field">Category 
-                <select name="category">
-                  <option value="Food">Food</option>
-                  <option value="Transport">Transport</option>
-                  <option value="Entertainment">Entertainment</option>
-                  <option value="Bills">Bills</option>
-                  <option value="Shopping">Shopping</option>
-                  <option value="Healthcare">Healthcare</option>
-                  <option value="Other">Other</option>
-                </select>
-              </label>
-              <div className="add-card-actions" style={{display:'flex',justifyContent:'flex-end'}}><button className="btn-primary" type="submit">Add Expense</button></div>
-            </form>
-          </section>
+              return (
+                <div key={type} className={`quick-add-tile ${isOpen ? 'open' : 'closed'}`}>
+                  <button
+                    type="button"
+                    className="quick-add-tile-head"
+                    onClick={() => setQuickAddOpen(prev => prev === type ? null : type)}
+                  >
+                    <span className="quick-add-icon">{meta.icon}</span>
+                    <span className="quick-add-title">{meta.title}</span>
+                    <span className="quick-add-chevron">{isOpen ? '▲' : '▼'}</span>
+                  </button>
 
-          <section className="card add-card">
-            <h3 style={{display:'flex',alignItems:'center',gap:'8px'}}>🚀 Add Investment</h3>
-            <form className="add-form-equal" onSubmit={(e)=>handleAdd('investments', e)} style={{display:'flex',flexDirection:'column',gap:8}}>
-              <label className="form-field">Amount <input name="amount" type="number" step="0.01" placeholder="0.00" required /></label>
-              <label className="form-field">Description <input name="description" placeholder="Description" /></label>
-              <label className="form-field">Date <input name="date" type="date" /></label>
-              <div className="add-card-actions" style={{display:'flex',justifyContent:'flex-end'}}><button className="btn-primary" type="submit">Add Investment</button></div>
-            </form>
-          </section>
-        </div>
+                  {isOpen && (
+                    <form className="quick-add-form" onSubmit={(e) => handleQuickAdd(type, e)}>
+                      <label className="form-field">
+                        Amount
+                        <input name="amount" type="number" step="0.01" placeholder="0.00" required />
+                      </label>
+                      <label className="form-field">
+                        Description
+                        <input name="description" placeholder="Description" />
+                      </label>
+                      <label className="form-field">
+                        Date
+                        <input name="date" type="date" />
+                      </label>
+                      {type === 'expenses' && (
+                        <label className="form-field">
+                          Category
+                          <select name="category">
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Bills">Bills</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </label>
+                      )}
+                      <div className="quick-add-actions">
+                        <button className="btn-primary" type="submit">{meta.button}</button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </section>
       </div>
     </div>
   )

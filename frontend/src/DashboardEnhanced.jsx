@@ -86,7 +86,7 @@ export default function DashboardEnhanced({ currentUser, token }) {
 
       <div style={{ padding: '0 24px 24px 24px' }}>
         {/* Top Row - Health Score and Quick Actions */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '20px', alignItems: 'stretch' }}>
           <HealthScore key={`health_${refreshKey}`} token={token} />
           <TrendingStocks />
         </div>
