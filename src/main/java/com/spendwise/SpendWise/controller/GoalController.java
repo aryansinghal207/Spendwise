@@ -4,10 +4,12 @@ import com.spendwise.SpendWise.model.Goal;
 import com.spendwise.SpendWise.model.UserProfile;
 import com.spendwise.SpendWise.repository.GoalRepository;
 import com.spendwise.SpendWise.services.AuthService;
+import com.spendwise.SpendWise.util.MoneyAmountUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -45,8 +47,8 @@ public class GoalController {
         if (u == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid token");
 
         String name = (String) body.get("name");
-        Double targetAmount = body.get("targetAmount") == null ? 0.0 : Double.valueOf(body.get("targetAmount").toString());
-        Double currentAmount = body.get("currentAmount") == null ? 0.0 : Double.valueOf(body.get("currentAmount").toString());
+        BigDecimal targetAmount = MoneyAmountUtil.parse(body.get("targetAmount"));
+        BigDecimal currentAmount = MoneyAmountUtil.parse(body.get("currentAmount"));
         String targetDateStr = (String) body.get("targetDate");
         LocalDate targetDate = targetDateStr == null ? LocalDate.now().plusMonths(6) : LocalDate.parse(targetDateStr);
         String type = (String) body.getOrDefault("type", "savings");
@@ -66,8 +68,8 @@ public class GoalController {
         if (!u.getId().equals(goal.getOwnerId())) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not owner");
 
         if (body.get("name") != null) goal.setName((String) body.get("name"));
-        if (body.get("targetAmount") != null) goal.setTargetAmount(Double.valueOf(body.get("targetAmount").toString()));
-        if (body.get("currentAmount") != null) goal.setCurrentAmount(Double.valueOf(body.get("currentAmount").toString()));
+        if (body.get("targetAmount") != null) goal.setTargetAmount(MoneyAmountUtil.parse(body.get("targetAmount")));
+        if (body.get("currentAmount") != null) goal.setCurrentAmount(MoneyAmountUtil.parse(body.get("currentAmount")));
         if (body.get("targetDate") != null) goal.setTargetDate(LocalDate.parse((String) body.get("targetDate")));
         if (body.get("status") != null) goal.setStatus((String) body.get("status"));
         if (body.get("type") != null) goal.setType((String) body.get("type"));
@@ -100,8 +102,14 @@ public class GoalController {
         Map<String, Object> achievements = new HashMap<>();
         achievements.put("completedGoals", completedGoals.size());
         achievements.put("activeGoals", activeGoals.size());
-        achievements.put("totalGoalAmount", activeGoals.stream().mapToDouble(g -> g.getTargetAmount() == null ? 0 : g.getTargetAmount()).sum());
-        achievements.put("currentProgress", activeGoals.stream().mapToDouble(g -> g.getCurrentAmount() == null ? 0 : g.getCurrentAmount()).sum());
+        BigDecimal totalGoalAmount = activeGoals.stream()
+                .map(g -> g.getTargetAmount() == null ? BigDecimal.ZERO : g.getTargetAmount())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal currentProgress = activeGoals.stream()
+                .map(g -> g.getCurrentAmount() == null ? BigDecimal.ZERO : g.getCurrentAmount())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        achievements.put("totalGoalAmount", totalGoalAmount);
+        achievements.put("currentProgress", currentProgress);
 
         return ResponseEntity.ok(achievements);
     }

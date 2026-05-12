@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import apiUrl from './api'
 import confetti from 'canvas-confetti'
+import { formatINR, normalizeRupeeString, parseRupeeNumber } from './formatMoney'
 
 export default function Milestones({ token }) {
   const [goals, setGoals] = useState([])
@@ -42,8 +43,8 @@ export default function Milestones({ token }) {
     const formData = new FormData(e.target)
     const body = {
       name: formData.get('name'),
-      targetAmount: parseFloat(formData.get('targetAmount')),
-      currentAmount: parseFloat(formData.get('currentAmount') || 0),
+      targetAmount: normalizeRupeeString(formData.get('targetAmount')),
+      currentAmount: normalizeRupeeString(formData.get('currentAmount') || '0'),
       targetDate: formData.get('targetDate'),
       type: formData.get('type')
     }
@@ -65,14 +66,17 @@ export default function Milestones({ token }) {
     const goal = goals.find(g => g.id === goalId)
     if (!goal) return
 
+    const amountStr = normalizeRupeeString(newAmount)
     await fetch(apiUrl(`/api/goals/${goalId}`), {
       method: 'PUT',
       headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ currentAmount: newAmount })
+      body: JSON.stringify({ currentAmount: amountStr })
     })
 
-    // Check if goal completed
-    if (newAmount >= goal.targetAmount && goal.status !== 'completed') {
+    // Check if goal completed (compare in paise to avoid float drift)
+    const updatedPaise = Math.round(parseRupeeNumber(amountStr) * 100)
+    const targetPaise = Math.round(parseRupeeNumber(goal.targetAmount) * 100)
+    if (updatedPaise >= targetPaise && goal.status !== 'completed') {
       await fetch(apiUrl(`/api/goals/${goalId}`), {
         method: 'PUT',
         headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
@@ -117,8 +121,8 @@ export default function Milestones({ token }) {
       {showAddForm && (
         <form onSubmit={handleAddGoal} className="add-goal-form">
           <input type="text" name="name" placeholder="Goal name" required />
-          <input type="number" name="targetAmount" placeholder="Target amount" step="0.01" required />
-          <input type="number" name="currentAmount" placeholder="Current amount" step="0.01" defaultValue="0" />
+          <input type="text" name="targetAmount" placeholder="Target (e.g. 350000 or 3,50,000)" inputMode="decimal" required />
+          <input type="text" name="currentAmount" placeholder="Current amount" inputMode="decimal" defaultValue="0" />
           <input type="date" name="targetDate" required />
           <select name="type" required>
             <option value="savings">Savings</option>
@@ -131,7 +135,9 @@ export default function Milestones({ token }) {
 
       <div className="goals-list">
         {goals.filter(g => g.status === 'active').map(goal => {
-          const progress = goal.targetAmount > 0 ? (goal.currentAmount / goal.targetAmount) * 100 : 0
+          const cur = parseRupeeNumber(goal.currentAmount)
+          const tgt = parseRupeeNumber(goal.targetAmount)
+          const progress = tgt > 0 ? Math.min(100, Math.round((cur / tgt) * 10000) / 100) : 0
           return (
             <div key={goal.id} className="goal-item">
               <div className="goal-header">
@@ -143,17 +149,17 @@ export default function Milestones({ token }) {
                   <div className="progress-fill" style={{ width: `${Math.min(progress, 100)}%` }} />
                 </div>
                 <div className="progress-text">
-                  ₹{goal.currentAmount.toFixed(2)} / ₹{goal.targetAmount.toFixed(2)} ({progress.toFixed(0)}%)
+                  {formatINR(goal.currentAmount)} / {formatINR(goal.targetAmount)} ({Math.round(progress)}%)
                 </div>
               </div>
               <div className="goal-actions">
                 <input 
-                  type="number" 
-                  placeholder="Update amount" 
-                  step="0.01"
+                  type="text"
+                  placeholder="Update amount"
+                  inputMode="decimal"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      handleUpdateProgress(goal.id, parseFloat(e.target.value))
+                      handleUpdateProgress(goal.id, e.target.value)
                       e.target.value = ''
                     }
                   }}

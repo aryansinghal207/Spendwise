@@ -1,10 +1,13 @@
 package com.spendwise.SpendWise.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -16,15 +19,19 @@ public class Goal {
 
     private Long ownerId;
     private String name;
-    private Double targetAmount;
-    private Double currentAmount;
+
+    @Column(precision = 19, scale = 2)
+    private BigDecimal targetAmount;
+
+    @Column(precision = 19, scale = 2)
+    private BigDecimal currentAmount;
     private LocalDate targetDate;
     private String status; // active, completed, abandoned
     private String type; // savings, expense_reduction, investment
 
     public Goal() {}
 
-    public Goal(Long ownerId, String name, Double targetAmount, Double currentAmount, LocalDate targetDate, String type) {
+    public Goal(Long ownerId, String name, BigDecimal targetAmount, BigDecimal currentAmount, LocalDate targetDate, String type) {
         this.ownerId = ownerId;
         this.name = name;
         this.targetAmount = targetAmount;
@@ -40,10 +47,10 @@ public class Goal {
     public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-    public Double getTargetAmount() { return targetAmount; }
-    public void setTargetAmount(Double targetAmount) { this.targetAmount = targetAmount; }
-    public Double getCurrentAmount() { return currentAmount; }
-    public void setCurrentAmount(Double currentAmount) { this.currentAmount = currentAmount; }
+    public BigDecimal getTargetAmount() { return targetAmount; }
+    public void setTargetAmount(BigDecimal targetAmount) { this.targetAmount = targetAmount; }
+    public BigDecimal getCurrentAmount() { return currentAmount; }
+    public void setCurrentAmount(BigDecimal currentAmount) { this.currentAmount = currentAmount; }
     public LocalDate getTargetDate() { return targetDate; }
     public void setTargetDate(LocalDate targetDate) { this.targetDate = targetDate; }
     public String getStatus() { return status; }
