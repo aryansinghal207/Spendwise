@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect, useMemo} from 'react'
-import apiUrl from './api'
+import apiUrl, { fetchJsonWithRetry } from './api'
 
 export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack}){
   const [status,setStatus] = useState('')
@@ -23,9 +23,11 @@ export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack}){
 
   async function submitSignIn(email, password){
     const payload = { email, password }
-    const res = await fetch(apiUrl('/api/auth/signin'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
-    if (!res.ok) throw new Error(await res.text())
-    const data = await res.json()
+    const data = await fetchJsonWithRetry(
+      apiUrl('/api/auth/signin'),
+      { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) },
+      { timeoutMs: 15000, retries: 2, retryDelayMs: 3500 }
+    )
     localStorage.setItem('token', data.token)
     onSignedIn(data.user, data.token)
   }
@@ -61,6 +63,7 @@ export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack}){
     }
 
     try{
+      setStatus('Waking server... please wait (first login can take time on free hosting)')
       await submitSignIn(email, password)
     }catch(err){ setStatus('Error: '+err.message) }
   }

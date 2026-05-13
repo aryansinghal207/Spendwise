@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import apiUrl from './api'
+import apiUrl, { fetchWithTimeout } from './api'
 import DashboardEnhanced from './DashboardEnhanced'
 import Reports from './Reports'
 import Settings from './Settings'
@@ -24,6 +24,13 @@ export default function RootApp(){
         .catch(()=> { localStorage.removeItem('token'); setToken(null); setUser(null); })
     }
   },[token])
+
+  // Warm backend on app load (helps on free-tier cold starts)
+  useEffect(() => {
+    const base = import.meta.env.VITE_API_URL || ''
+    if (!base) return
+    fetchWithTimeout(apiUrl('/api/health'), {}, 8000).catch(() => {})
+  }, [])
 
   useEffect(()=>{
     try{

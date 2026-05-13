@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect, useMemo} from 'react'
-import apiUrl from './api'
+import apiUrl, { fetchJsonWithRetry } from './api'
 
 export default function SignUp({onSignedUp, onSwitchToSignIn, onSwitchBack}){
   const [status,setStatus] = useState('')
@@ -49,9 +49,11 @@ export default function SignUp({onSignedUp, onSwitchToSignIn, onSwitchBack}){
   const strength = passwordStrength(passwordDraft)
 
   async function submitSignUp(payload){
-    const res = await fetch(apiUrl('/api/auth/signup'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
-    if (!res.ok) throw new Error(await res.text())
-    const data = await res.json()
+    const data = await fetchJsonWithRetry(
+      apiUrl('/api/auth/signup'),
+      { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) },
+      { timeoutMs: 20000, retries: 2, retryDelayMs: 3500 }
+    )
     localStorage.setItem('token', data.token)
     onSignedUp(data.user, data.token)
   }
@@ -113,6 +115,7 @@ export default function SignUp({onSignedUp, onSwitchToSignIn, onSwitchBack}){
       accountType: f.elements.accountType.value
     }
     try{
+      setStatus('Waking server... please wait (first signup can take time on free hosting)')
       await submitSignUp(payload)
     }catch(err){ setStatus('Error: '+err.message) }
   }
