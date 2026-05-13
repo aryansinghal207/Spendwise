@@ -9,12 +9,14 @@ import NavBar from './components/NavBar'
 import AstraChat from './AstraChat'
 import Landing from './Landing'
 import './index.css'
+import Toast from './components/Toast'
 
 export default function RootApp(){
   const [user,setUser] = useState(null)
   const [token,setToken] = useState(localStorage.getItem('token') || null)
   const [view,setView] = useState('landing')
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light')
+  const [toast, setToast] = useState(null)
 
   useEffect(()=>{
     if (token) {
@@ -43,6 +45,16 @@ export default function RootApp(){
 
   function onSignedIn(u,t){ setUser(u); setToken(t); setView('dashboard') }
   function onSignedUp(u,t){ setUser(u); setToken(t); setView('dashboard') }
+
+  function showToast(message, type = 'success') {
+    setToast({ message, type, id: Date.now() })
+  }
+
+  useEffect(() => {
+    if (!toast?.id) return
+    const t = setTimeout(() => setToast(null), 3500)
+    return () => clearTimeout(t)
+  }, [toast?.id])
 
   function switchToSignUp(){ setView('signup') }
   function switchToSignIn(){ setView('signin') }
@@ -99,7 +111,21 @@ export default function RootApp(){
               <div className="auth-shell"><Landing onSignUp={switchToSignUp} onSignIn={switchToSignIn} /></div>
             ) : (
               <div className="auth-shell">
-                {view==='signin' ? <SignIn onSignedIn={onSignedIn} onSwitchToSignUp={switchToSignUp} onSwitchBack={switchToLanding}/> : <SignUp onSignedUp={onSignedUp} onSwitchToSignIn={switchToSignIn} onSwitchBack={switchToLanding}/>} 
+                {view==='signin' ? (
+                  <SignIn
+                    onSignedIn={onSignedIn}
+                    onSwitchToSignUp={switchToSignUp}
+                    onSwitchBack={switchToLanding}
+                    onToast={showToast}
+                  />
+                ) : (
+                  <SignUp
+                    onSignedUp={onSignedUp}
+                    onSwitchToSignIn={switchToSignIn}
+                    onSwitchBack={switchToLanding}
+                    onToast={showToast}
+                  />
+                )} 
               </div>
             )}
           </div>
@@ -107,6 +133,7 @@ export default function RootApp(){
       </main>
       <AstraChat currentUser={user} />
       <footer className="app-footer">© {new Date().getFullYear()} SpendWise — Built with care</footer>
+      <Toast toast={toast} />
     </div>
   )
 }

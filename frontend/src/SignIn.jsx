@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect, useMemo} from 'react'
 import apiUrl, { fetchJsonWithRetry } from './api'
 
-export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack}){
+export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack, onToast}){
   const [status,setStatus] = useState('')
   const [emailDraft, setEmailDraft] = useState('')
   const formRef = useRef(null)
@@ -29,6 +29,7 @@ export default function SignIn({onSignedIn, onSwitchToSignUp, onSwitchBack}){
       { timeoutMs: 15000, retries: 2, retryDelayMs: 3500 }
     )
     localStorage.setItem('token', data.token)
+    onToast && onToast('Signed In Successfully', 'success')
     onSignedIn(data.user, data.token)
   }
 
